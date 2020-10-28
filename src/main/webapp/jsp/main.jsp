@@ -21,13 +21,13 @@
             <c:if test="${room.status != 'UNAVAILABLE'}">
                 <div class="card border-dark bg-light mb-3">
                     <c:if test="${not empty room.imgName}">
-                        <img class="card-img-top" src="/img/${room.imgName}">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/${room.imgName}">
                     </c:if>
 
                     <div class="card-body">
                         <c:if test="${role != 'ADMIN'}">
                             <p class="card-text">Capacity: ${room.capacity}</p>
-                            <p class="card-text">Type: <i>${room.type}</i></p>
+                            <p class="card-text">Type: <em>${room.type}</em></p>
                             <p class="card-text">Price: <strong>${room.price}$</strong> (per night)</p>
                         </c:if>
                         <c:if test="${role == 'USER'}">

@@ -62,7 +62,8 @@ public class RoomDaoImpl implements RoomDao {
                         .capacity(resultSet.getInt(Fields.ROOM_CAPACITY))
                         .price(resultSet.getDouble(Fields.ROOM_PRICE))
                         .type(RoomType.valueOf(resultSet.getString(Fields.ROOM_TYPE)))
-                        .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS))).build());
+                        .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS)))
+                        .imgName(resultSet.getString(Fields.ROOM_IMG_NAME)).build());
             }
 
             connection.commit();
