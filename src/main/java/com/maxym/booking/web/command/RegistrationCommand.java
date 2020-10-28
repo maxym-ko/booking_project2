@@ -2,7 +2,7 @@ package com.maxym.booking.web.command;
 
 import com.maxym.booking.Path;
 import com.maxym.booking.db.dao.UserDao;
-import com.maxym.booking.db.dao.UserDaoImpl;
+import com.maxym.booking.db.dao.impl.UserDaoImpl;
 import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.db.entity.user.User;
 

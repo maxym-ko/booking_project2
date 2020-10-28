@@ -2,7 +2,7 @@ package com.maxym.booking.web.command;
 
 import com.maxym.booking.Path;
 import com.maxym.booking.db.dao.RoomDao;
-import com.maxym.booking.db.dao.RoomDaoImpl;
+import com.maxym.booking.db.dao.impl.RoomDaoImpl;
 import com.maxym.booking.db.entity.room.Room;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,8 +1,10 @@
 package com.maxym.booking.db.entity.room;
 
+import com.maxym.booking.db.entity.application.Application;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +20,5 @@ public class Room implements Serializable {
     private RoomType type;
     private RoomStatus status;
     private String imgName;
+    private List<Application> reservations;
 }

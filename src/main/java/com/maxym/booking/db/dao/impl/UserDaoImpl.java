@@ -1,6 +1,7 @@
-package com.maxym.booking.db.dao;
+package com.maxym.booking.db.dao.impl;
 
 import com.maxym.booking.db.Fields;
+import com.maxym.booking.db.dao.UserDao;
 import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.db.util.DBManager;
 import com.maxym.booking.db.entity.user.User;

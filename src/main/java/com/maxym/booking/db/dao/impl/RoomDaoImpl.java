@@ -1,6 +1,7 @@
-package com.maxym.booking.db.dao;
+package com.maxym.booking.db.dao.impl;
 
 import com.maxym.booking.db.Fields;
+import com.maxym.booking.db.dao.RoomDao;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
 import com.maxym.booking.db.entity.room.RoomType;
