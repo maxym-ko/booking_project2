@@ -16,7 +16,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_FIND_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?";
 
     @Override
-    public void createUser(User user) {
+    public void saveUser(User user) {
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER)) {
             preparedStatement.setString(1, user.getUsername());

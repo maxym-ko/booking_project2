@@ -26,7 +26,7 @@ public class RegistrationCommand implements Command {
                 .role(Role.valueOf(role)).build();
 
         UserDao userDao = new UserDaoImpl();
-        userDao.createUser(user);
+        userDao.saveUser(user);
         return Path.REDIRECT_SHOW_LOGIN;
     }
 }

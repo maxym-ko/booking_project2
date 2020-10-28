@@ -18,8 +18,7 @@
     </a>
     <div class="collapse" id="newApplicationsId">
         <div class="form-group">
-            <form action="<c:url value="/controller?command=create_application"/>" method="post"
-                  enctype="multipart/form-data">
+            <form action="<c:url value="/controller?command=create_application"/>" method="post">
                 <div class="form-row">
                     <div class="form-group col-md">
                         <input class="form-control" type="number" min="0" name="capacity" placeholder="capacity">

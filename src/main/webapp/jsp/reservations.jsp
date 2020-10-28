@@ -53,12 +53,14 @@
                         </button>
                         <button
                                 <c:if test="${!paymentWaiting}">disabled</c:if> type="submit" class="btn btn-success">
-                            <c:if test="${paymentWaiting}">
-                                Confirm payment
-                            </c:if>
-                            <c:otherwise>
-                                Payment confirmed
-                            </c:otherwise>
+                            <c:choose>
+                                <c:when test="${paymentWaiting}">
+                                    Confirm payment
+                                </c:when>
+                                <c:otherwise>
+                                    Payment confirmed
+                                </c:otherwise>
+                            </c:choose>
                         </button>
                         <input type="hidden" name="reservationId" value="${reservation.id}">
                     </form>

@@ -4,7 +4,7 @@
 </a>
 <div class="collapse" id="addNewRoomId">
     <div class="form-group">
-        <form action="<c:url value="/controller?command=add_room"/>" method="post" enctype="multipart/form-data">
+        <form action="<c:url value="/controller?command=add_room"/>" method="post">
             <div class="form-row">
                 <div class="form-group col-md">
                     <input class="form-control" type="text" name="capacity" placeholder="capacity">

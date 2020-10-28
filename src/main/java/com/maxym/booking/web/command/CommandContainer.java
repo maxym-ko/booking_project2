@@ -19,6 +19,8 @@ public class CommandContainer {
         commands.put("show_applications", new ShowApplicationsCommand());
         commands.put("show_applications_admin", new ShowApplicationsAdminCommand());
         commands.put("show_reservations", new ShowReservationsCommand());
+        commands.put("book_room", new BookRoomCommand());
+        commands.put("create_application", new CreateApplicationCommand());
     }
 
     private CommandContainer(){}

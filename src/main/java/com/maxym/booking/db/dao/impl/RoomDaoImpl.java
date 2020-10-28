@@ -19,7 +19,7 @@ public class RoomDaoImpl implements RoomDao {
     private static final String SQL_FIND_ALL_ROOMS = "SELECT * FROM room";
 
     @Override
-    public void createRoom(Room room) {
+    public void saveRoom(Room room) {
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ROOM)) {
             preparedStatement.setInt(1, room.getCapacity());
@@ -83,7 +83,8 @@ public class RoomDaoImpl implements RoomDao {
                     .capacity(resultSet.getInt(Fields.ROOM_CAPACITY))
                     .price(resultSet.getDouble(Fields.ROOM_PRICE))
                     .type(RoomType.valueOf(resultSet.getString(Fields.ROOM_TYPE)))
-                    .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS))).build();
+                    .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS)))
+                    .imgName(resultSet.getString(Fields.ROOM_IMG_NAME)).build();
         }
         resultSet.close();
         return room;

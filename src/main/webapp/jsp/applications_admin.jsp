@@ -47,7 +47,7 @@
                         </c:when>
                         <c:otherwise>
                             <th scope="row">${counter}</th>
-                            <td><@spring.message "applications.image_not_selected"/></td>
+                            <td>Not selected yet</td>
                             <td>${application.requirementCapacity}</td>
                             <td>${application.requirementType}</td>
                             <td>${application.checkInDate}</td>

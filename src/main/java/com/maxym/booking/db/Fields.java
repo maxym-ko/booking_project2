@@ -28,6 +28,6 @@ public final class Fields {
 
     public static final String BILL_ID = "id";
     public static final String BILL_CREATED = "created";
-    public static final String ROOM_RECEIPT_ID = "receipt_id";
-    public static final String ROOM_TOTAL_PRICE = "total_price";
+    public static final String BILL_RECEIPT_ID = "receipt_id";
+    public static final String BILL_TOTAL_PRICE = "total_price";
 }

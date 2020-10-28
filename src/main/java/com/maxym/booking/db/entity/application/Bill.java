@@ -21,10 +21,10 @@ public class Bill implements Serializable {
 
     public Bill() {}
 
-    public Bill(LocalDate start, LocalDate end, double price) {
+    public Bill(Date start, Date end, double price) {
         created = new Date(System.currentTimeMillis());
 
-        long days = Duration.between(start.atStartOfDay(), end.atStartOfDay()).toDays();
+        long days = Duration.between(start.toLocalDate().atStartOfDay(), end.toLocalDate().atStartOfDay()).toDays();
 
         this.totalPrice = price * days;
     }

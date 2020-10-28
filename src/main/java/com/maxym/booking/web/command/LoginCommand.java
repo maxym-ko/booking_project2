@@ -8,6 +8,7 @@ import com.maxym.booking.db.entity.user.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 
 public class LoginCommand implements Command {
 

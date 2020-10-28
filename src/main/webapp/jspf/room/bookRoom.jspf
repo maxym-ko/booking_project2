@@ -6,7 +6,7 @@
 </a>
 <div class="collapse" id="newApplicationsId">
     <div class="form-group">
-        <form action="<c:url value="/controller?command=book_room"/>" method="post" enctype="multipart/form-data">
+        <form action="<c:url value="/controller?command=book_room"/>" method="post">
             <div class="form-group row">
                 <label for="check-in" class="col-sm-5 col-form-label">Check-in: </label>
                 <div class="col-sm-7">
