@@ -122,7 +122,7 @@
                             <input type="hidden" name="id" value="${application.id}">
                         </form>
                     </td>
-                    <c:set var="count" value="${counter + 1}"/>
+                    <c:set var="counter" value="${counter + 1}"/>
 
                 </c:if>
             </tr>

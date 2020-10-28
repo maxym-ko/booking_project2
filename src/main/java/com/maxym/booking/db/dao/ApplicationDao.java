@@ -7,7 +7,8 @@ import java.util.List;
 public interface ApplicationDao {
     void saveApplication(Application application);
     void saveReservation(Application application);
-    Application findApplicationById(long id);
     List<Application> findAllApplications();
     List<Application> findAllReservations();
+    Application findApplicationById(long id);
+    void deleteApplicationById(long id);
 }

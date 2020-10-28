@@ -10,6 +10,8 @@ import java.sql.*;
 public class BillDaoImpl implements BillDao {
     public static final String SQL_INSERT_BILL = "INSERT INTO bill (created, receipt_id, total_price) VALUES (?, ?, ?)";
     private static final String SQL_FIND_BILL_BY_ID = "SELECT * FROM bill WHERE id=?";
+    private static final String SQL_DELETE_BILL_BY_ID = "DELETE FROM bill WHERE id=?";
+
     @Override
     public long saveBill(Bill bill) {
         long billId = -1;
@@ -29,6 +31,19 @@ public class BillDaoImpl implements BillDao {
 //            TODO: Catch exception
         }
         return billId;
+    }
+
+    @Override
+    public void deleteBillById(long id) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BILL_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
     }
 
     @Override

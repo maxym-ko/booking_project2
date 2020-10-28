@@ -7,4 +7,5 @@ import java.util.List;
 public interface BillDao {
     long saveBill(Bill bill);
     Bill findBillById(long id);
+    void deleteBillById(long id);
 }
