@@ -11,6 +11,7 @@ public class BillDaoImpl implements BillDao {
     public static final String SQL_INSERT_BILL = "INSERT INTO bill (created, receipt_id, total_price) VALUES (?, ?, ?)";
     private static final String SQL_FIND_BILL_BY_ID = "SELECT * FROM bill WHERE id=?";
     private static final String SQL_DELETE_BILL_BY_ID = "DELETE FROM bill WHERE id=?";
+    public static final String SQL_UPDATE_BILL_WITH_RECEIPT_BY_ID = "UPDATE bill SET receipt_id=? WHERE id=?";
 
     @Override
     public long saveBill(Bill bill) {
@@ -38,6 +39,20 @@ public class BillDaoImpl implements BillDao {
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BILL_BY_ID)) {
             preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
+    }
+
+    @Override
+    public void updateBillWithReceiptById(long billId, String receiptId) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BILL_WITH_RECEIPT_BY_ID)) {
+            preparedStatement.setString(1, receiptId);
+            preparedStatement.setLong(2, billId);
             preparedStatement.executeUpdate();
 
             connection.commit();

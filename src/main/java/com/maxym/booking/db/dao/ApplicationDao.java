@@ -10,5 +10,6 @@ public interface ApplicationDao {
     List<Application> findAllApplications();
     List<Application> findAllReservations();
     Application findApplicationById(long id);
+    void updateApplicationToBookedById(long id);
     void deleteApplicationById(long id);
 }

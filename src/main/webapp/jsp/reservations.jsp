@@ -50,7 +50,6 @@
                                 </div>
                             </div>
                         </c:if>
-                        </button>
                         <button
                                 <c:if test="${!paymentWaiting}">disabled</c:if> type="submit" class="btn btn-success">
                             <c:choose>
@@ -63,6 +62,7 @@
                             </c:choose>
                         </button>
                         <input type="hidden" name="reservationId" value="${reservation.id}">
+                        <input type="hidden" name="billId" value="${reservation.bill.id}">
                     </form>
                 </td>
             </tr>
