@@ -16,5 +16,6 @@ public final class Path {
     public static final String REDIRECT_SHOW_LOGIN = "/controller?command=show_login";
     public static final String REDIRECT_MAIN = "/controller?command=main";
     public static final String REDIRECT_APPLICATIONS = "/controller?command=show_applications";
+    public static final String REDIRECT_APPLICATIONS_ADMIN = "/controller?command=show_applications_admin";
     public static final String REDIRECT_RESERVATIONS = "/controller?command=show_reservations";
 }

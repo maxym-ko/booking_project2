@@ -22,6 +22,7 @@ public class CommandContainer {
         commands.put("book_room", new BookRoomCommand());
         commands.put("create_application", new CreateApplicationCommand());
         commands.put("remove_application", new RemoveApplicationCommand());
+        commands.put("remove_application_admin", new RemoveApplicationAdminCommand());
         commands.put("confirm_payment", new ConfirmPaymentCommand());
     }
 

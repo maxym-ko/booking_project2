@@ -84,7 +84,7 @@
                     </td>
                 </tr>
 
-                <c:set var="count" value="${counter + 1}"/>
+                <c:set var="counter" value="${counter + 1}"/>
             </c:if>
         </c:forEach>
         </tbody>
