@@ -1,7 +1,11 @@
 package com.maxym.booking.db.entity.user;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.io.Serializable;
 
+@Builder
 public class User implements Serializable {
 
     private static final long serialVersionUID = -4930879145976782706L;

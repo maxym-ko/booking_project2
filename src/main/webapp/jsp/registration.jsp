@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html>
 
-<c:set var="title" value="Login" scope="page"/>
+<c:set var="title" value="Registration" scope="page"/>
 <%@ include file="../jspf/head.jspf" %>
 
 <body>
@@ -13,15 +13,15 @@
 <div class="container mt-5">
     <form action="<c:url value="/controller?command=registration"/>" method="post">
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Username: </label>
+            <label for="username" class="col-sm-2 col-form-label">Username: </label>
             <div class="col-sm-5">
-                <input class="form-control" type="text" name="username" placeholder="username"/>
+                <input class="form-control" type="text" id="username" name="username" placeholder="username"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Password: </label>
+            <label for="password" class="col-sm-2 col-form-label">Password: </label>
             <div class="col-sm-5">
-                <input class="form-control" type="password" name="password" placeholder="password"/>
+                <input class="form-control" type="password" id="password" name="password" placeholder="password"/>
             </div>
         </div>
         <div class="form-group row">

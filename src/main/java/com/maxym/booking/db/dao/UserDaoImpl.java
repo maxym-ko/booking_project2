@@ -1,6 +1,5 @@
 package com.maxym.booking.db.dao;
 
-import com.maxym.booking.db.EntityMapper;
 import com.maxym.booking.db.Fields;
 import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.db.util.DBManager;
@@ -12,12 +11,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDaoImpl implements UserDao {
-    private static final String SQL_FIND_USER_BY_USERNAME =
-            "SELECT * FROM user WHERE username=?";
+    public static final String SQL_INSERT_USER = "INSERT INTO user (username, password, role) VALUES (?, ?, ?)";
+    private static final String SQL_FIND_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?";
 
     @Override
     public User createUser(User user) {
-        return null;
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER)) {
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getRole().name());
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+//            TODO: Catch exception
+        }
+        return user;
     }
 
     @Override
@@ -28,9 +38,12 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(1, username);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            UserMapper userMapper = new UserMapper();
             if (resultSet.next()) {
-                user = userMapper.mapRow(resultSet);
+                user = User.builder()
+                        .id(resultSet.getLong(Fields.USER_ID))
+                        .username(resultSet.getString(Fields.USER_USERNAME))
+                        .password(resultSet.getString(Fields.USER_PASSWORD))
+                        .role(Role.valueOf(resultSet.getString(Fields.USER_ROLE))).build();
             }
             resultSet.close();
             connection.commit();
@@ -43,22 +56,5 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findUser(long id) {
         return null;
-    }
-
-    private static class UserMapper implements EntityMapper<User> {
-
-        @Override
-        public User mapRow(ResultSet resultSet) {
-            try {
-                User user = new User();
-                user.setId(resultSet.getLong(Fields.USER_ID));
-                user.setUsername(resultSet.getString(Fields.USER_USERNAME));
-                user.setPassword(resultSet.getString(Fields.USER_PASSWORD));
-                user.setRole(Role.valueOf(resultSet.getString(Fields.USER_ROLE)));
-                return user;
-            } catch (SQLException e) {
-                throw new IllegalStateException(e);
-            }
-        }
     }
 }

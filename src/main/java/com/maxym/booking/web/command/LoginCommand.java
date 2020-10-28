@@ -18,7 +18,6 @@ public class LoginCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
-        // obtain login and password from the request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 

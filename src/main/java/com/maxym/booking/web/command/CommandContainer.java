@@ -13,16 +13,15 @@ public class CommandContainer {
         commands.put("show_login", new ShowLoginCommand());
         commands.put("login", new LoginCommand());
         commands.put("show_registration", new ShowRegistrationCommand());
-        commands.put("registrationlogin", new RegistrationCommand());
+        commands.put("registration", new RegistrationCommand());
         commands.put("logout", new LogoutCommand());
     }
 
     private CommandContainer(){}
 
     public static Command get(String commandName) {
-        if (commandName == null || !commands.containsKey(commandName)) {
-            return commands.get("main");
-        }
+        if (commandName == null) return commands.get("main");
+        if (!commands.containsKey(commandName)) return commands.get("invalidCommand");
 
         return commands.get(commandName);
     }
