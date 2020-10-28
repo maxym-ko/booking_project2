@@ -7,7 +7,8 @@ public class CommandContainer {
     private static final Map<String, Command> commands = new TreeMap<>();
 
     static {
-        commands.put("invalidCommand", new InvalidCommand());
+        commands.put("invalid", new InvalidCommand());
+        commands.put("forbidden", new ForbiddenCommand());
         commands.put("main", new MainCommand());
         commands.put("about", new AboutCommand());
         commands.put("show_login", new ShowLoginCommand());
@@ -24,7 +25,7 @@ public class CommandContainer {
 
     public static Command get(String commandName) {
         if (commandName == null) return commands.get("main");
-        if (!commands.containsKey(commandName)) return commands.get("invalidCommand");
+        if (!commands.containsKey(commandName)) return commands.get("invalid");
 
         return commands.get(commandName);
     }

@@ -11,6 +11,8 @@ public class ShowRegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getSession().getAttribute("user") != null) return Path.REDIRECT_FORBIDDEN_COMMAND;
+
         return Path.PAGE_REGISTRATION;
     }
 }

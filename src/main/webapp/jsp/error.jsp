@@ -13,7 +13,7 @@
 
 <div class="container mt-5">
     <h1>Error</h1>
-    <h3>Maybe, not realized yet</h3>
+    <h3>${requestScope.message}</h3>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>

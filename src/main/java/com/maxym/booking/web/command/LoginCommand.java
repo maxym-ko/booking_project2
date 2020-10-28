@@ -16,6 +16,7 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
+        if (session.getAttribute("user") != null) return Path.REDIRECT_FORBIDDEN_COMMAND;
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
