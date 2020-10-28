@@ -22,8 +22,8 @@ public class LoginCommand implements Command {
         String password = request.getParameter("password");
 
         // TODO: error handler
-
-        User user = new UserDaoImpl().findUser(username);
+        UserDao userDao = new UserDaoImpl();
+        User user = userDao .findUserByUsername(username);
 
         if (user == null || !password.equals(user.getPassword())) {
             return Path.PAGE_LOGIN;
@@ -38,6 +38,6 @@ public class LoginCommand implements Command {
 
         session.setAttribute("user", user);
 
-        return Path.PAGE_MAIN;
+        return Path.REDIRECT_MAIN;
     }
 }

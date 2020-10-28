@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CommandContainer {
-
     private static final Map<String, Command> commands = new TreeMap<>();
 
     static {

@@ -25,6 +25,6 @@ public class RegistrationCommand implements Command {
 
         UserDao userDao = new UserDaoImpl();
         userDao.createUser(user);
-        return Path.PAGE_LOGIN;
+        return Path.REDIRECT_SHOW_LOGIN;
     }
 }

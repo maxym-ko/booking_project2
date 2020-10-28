@@ -31,7 +31,9 @@ public class Controller extends HttpServlet {
 
         String forward = command.execute(request, response);
 
-        if (forward != null) {
+        if (forward.contains("/controller")) {
+            response.sendRedirect(forward);
+        } else {
             request.getRequestDispatcher(forward).forward(request, response);
         }
     }
