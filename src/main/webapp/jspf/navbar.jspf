@@ -1,0 +1,51 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar-brand">Booking project</div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="<c:url value="/controller"/>">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<c:url value="/controller?command=about"/>">About</a>
+            </li>
+<%--            <li class="nav-item dropdown">--%>
+<%--                <a class="nav-link dropdown-toggle" href="#" id="languageChanger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--%>
+<%--                    Language--%>
+<%--                </a>--%>
+<%--                <div class="dropdown-menu" aria-labelledby="languageChanger">--%>
+<%--                    <a class="dropdown-item" href="?lang=uk">Українська </a>--%>
+<%--                    <a class="dropdown-item" href="?lang=en">English </a>--%>
+<%--                </div>--%>
+<%--            </li>--%>
+        </ul>
+        <c:set var="role" value="${sessionScope.role}"/>
+        <c:set var="username" value="${sessionScope.user.username}"/>
+
+        <c:choose>
+            <c:when test="${role == 'ADMIN'}">
+                <a class="nav-link" href="<c:url value="/controller?command=show_applications_admin"/>">Manage application</a>
+            </c:when>
+            <c:when test="${role == 'USER'}">
+                <a class="nav-link" href="<c:url value="/controller?command=show_applications"/>">My applications</a>
+                <a class="nav-link" href="<c:url value="/controller?command=show_reservations"/>">My reservations</a>
+            </c:when>
+        </c:choose>
+        <c:choose>
+            <c:when test="${empty username}">
+                <a href="<c:url value="/controller?command=show_login"/>" class="btn btn-primary" role="button" aria-pressed="true">Login</a>
+            </c:when>
+            <c:otherwise>
+                <form action="<c:url value="/controller?command=logout"/>" method="post">
+                    <input class="btn btn-primary" type="submit" value="Sign out (${username})"/>
+                </form>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</nav>
