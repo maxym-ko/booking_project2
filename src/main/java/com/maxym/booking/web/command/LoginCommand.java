@@ -38,7 +38,6 @@ public class LoginCommand implements Command {
 //                forward = Path.COMMAND__LIST_MENU;
 
         session.setAttribute("user", user);
-        session.setAttribute("role", user.getRole());
 
         return Path.PAGE_MAIN;
     }

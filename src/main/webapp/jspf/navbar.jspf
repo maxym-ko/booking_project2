@@ -25,7 +25,7 @@
 <%--                </div>--%>
 <%--            </li>--%>
         </ul>
-        <c:set var="role" value="${sessionScope.role}"/>
+        <c:set var="role" value="${sessionScope.user.role}"/>
         <c:set var="username" value="${sessionScope.user.username}"/>
 
         <c:choose>
