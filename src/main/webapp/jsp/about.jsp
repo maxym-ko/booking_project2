@@ -5,10 +5,10 @@
 <html>
 
 <c:set var="title" value="Main" scope="page"/>
-<%@ include file="../jspf/head.jspf" %>
+<%@ include file="../jspf/page/head.jspf" %>
 
 <body>
-<%@ include file="../jspf/navbar.jspf" %>
+<%@ include file="../jspf/page/navbar.jspf" %>
 
 
 <div class="container mt-5">
@@ -31,6 +31,6 @@
         не сплачений, бронь автоматично знімається.</p>
 </div>
 
-<jsp:include page="../jspf/footer.jspf"/>
+<jsp:include page="../jspf/page/footer.jspf"/>
 </body>
 </html>

@@ -5,10 +5,10 @@
 <html>
 
 <c:set var="title" value="Registration" scope="page"/>
-<%@ include file="../jspf/head.jspf" %>
+<%@ include file="../jspf/page/head.jspf" %>
 
 <body>
-<%@ include file="../jspf/navbar.jspf" %>
+<%@ include file="../jspf/page/navbar.jspf" %>
 
 <div class="container mt-5">
     <form action="<c:url value="/controller?command=registration"/>" method="post">
@@ -38,6 +38,6 @@
     </form>
 </div>
 
-<jsp:include page="../jspf/footer.jspf"/>
+<jsp:include page="../jspf/page/footer.jspf"/>
 </body>
 </html>
