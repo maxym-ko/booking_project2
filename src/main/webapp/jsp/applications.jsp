@@ -78,7 +78,7 @@
                     <c:choose>
                         <c:when test="${not empty application.room}">
 
-                            <td><img class="img-thumbnail" src="${pageContext.request.contextPath}/img/${room.imgName}">
+                            <td><img class="img-thumbnail" src="${pageContext.request.contextPath}/img/${application.room.imgName}">
                             </td>
                             <td>${application.room.capacity}</td>
                             <td>${application.room.type}</td>

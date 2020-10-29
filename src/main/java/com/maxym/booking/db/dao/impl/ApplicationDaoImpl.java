@@ -24,7 +24,9 @@ public class ApplicationDaoImpl implements ApplicationDao {
     private static final String SQL_FIND_ALL_APPLICATIONS = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME'";
     private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED'";
     private static final String SQL_DELETE_APPLICATION_BY_ID = "DELETE FROM application WHERE id=?";
-    private static final String SQL_UPDATE_RESERVATION_TO_BOOKED_BY_ID = "UPDATE application SET status = 'BOOKED' WHERE id=?";
+    private static final String SQL_CONFIRM_APPLICATION_BY_ID = "UPDATE application SET status = 'PAYMENT_WAITING' WHERE id=?";
+    private static final String SQL_REJECT_APPLICATION_BY_ID = "UPDATE application SET status = 'LOOKING_FOR', room_id=null WHERE id=?";
+    private static final String SQL_CONFIRM_APPLICATION_PAYMENT_BY_ID = "UPDATE application SET status = 'BOOKED' WHERE id=?";
     private static final String SQL_UPDATE_APPLICATION = "UPDATE application SET " +
             "check_in_date=?, check_out_date=?, status=?, total_price=?, bill_id=?, room_id=? " +
             "WHERE id=?";
@@ -68,9 +70,35 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void updateApplicationToBookedById(long id) {
+    public void confirmApplicationPaymentById(long id) {
         try (Connection connection = DBManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_RESERVATION_TO_BOOKED_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_CONFIRM_APPLICATION_PAYMENT_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
+    }
+
+    @Override
+    public void confirmApplicationById(long id) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_CONFIRM_APPLICATION_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
+    }
+
+    @Override
+    public void rejectApplicationById(long id) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_REJECT_APPLICATION_BY_ID)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
 
