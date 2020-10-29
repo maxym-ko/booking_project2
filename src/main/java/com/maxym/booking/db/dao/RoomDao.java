@@ -8,4 +8,6 @@ public interface RoomDao {
     void saveRoom(Room room);
     Room findRoomById(long id);
     List<Room> findAllRooms();
+    void updateRoom(Room room);
+    void deleteRoomById(long id);
 }

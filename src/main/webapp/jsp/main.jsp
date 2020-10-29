@@ -55,7 +55,7 @@
                                                     value="STANDARD">Standard
                                             </option>
                                             <option <c:if test="${room.type == 'LUXURY'}"> selected </c:if>
-                                                    value="STANDARD">Luxury
+                                                    value="LUXURY">Luxury
                                             </option>
                                         </select>
                                     </div>
