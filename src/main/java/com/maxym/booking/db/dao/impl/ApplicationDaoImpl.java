@@ -9,6 +9,7 @@ import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomType;
 import com.maxym.booking.db.entity.user.User;
 import com.maxym.booking.db.util.DBManager;
+import sun.security.krb5.internal.APOptions;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class ApplicationDaoImpl implements ApplicationDao {
     private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED'";
     private static final String SQL_DELETE_APPLICATION_BY_ID = "DELETE FROM application WHERE id=?";
     private static final String SQL_UPDATE_RESERVATION_TO_BOOKED_BY_ID = "UPDATE application SET status = 'BOOKED' WHERE id=?";
+    private static final String SQL_UPDATE_APPLICATION = "UPDATE application SET " +
+            "check_in_date=?, check_out_date=?, status=?, total_price=?, bill_id=?, room_id=? " +
+            "WHERE id=?";
 
     @Override
     public void saveApplication(Application application) {
@@ -72,6 +76,27 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             connection.commit();
         } catch (SQLException e) {
+//            TODO: Catch exception
+        }
+    }
+
+    @Override
+    public void updateApplication(Application application) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_APPLICATION)) {
+            preparedStatement.setDate(1, application.getCheckInDate());
+            preparedStatement.setDate(2, application.getCheckOutDate());
+            preparedStatement.setString(3, application.getStatus().name());
+            preparedStatement.setDouble(4, application.getTotalPrice());
+            Bill bill = application.getBill();
+            preparedStatement.setLong(5, bill == null ? -1 : bill.getId());
+            Room room = application.getRoom();
+            preparedStatement.setLong(6, room == null ? -1 : room.getId());
+            preparedStatement.setLong(7, application.getId());
+            preparedStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
 //            TODO: Catch exception
         }
     }

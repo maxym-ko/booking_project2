@@ -36,7 +36,7 @@
                         <c:when test="${application.status != 'LOOKING_FOR'}">
                             <th scope="row">${counter}</th>
                             <td><img class="img-thumbnail"
-                                     src=""${pageContext.request.contextPath}/img/${application.room.imgName}"">
+                                     src="${pageContext.request.contextPath}/img/${application.room.imgName}">
                             </td>
                             <td>${application.requirementCapacity}</td>
                             <td>${application.requirementType}</td>
@@ -60,7 +60,7 @@
                     <td>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <a href="<c:url value="/controller?command=find_room?id=${application.id}"/>"
+                                <a href="<c:url value="/controller?command=find_room&id=${application.id}"/>"
                                    type="submit" class="btn btn-success">
                                     <c:choose>
                                         <c:when test="${application.status == 'ACCEPT_WAITING'}">

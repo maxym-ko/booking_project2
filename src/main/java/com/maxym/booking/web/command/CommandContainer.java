@@ -20,6 +20,8 @@ public class CommandContainer {
         commands.put("show_applications_admin", new ShowApplicationsAdminCommand());
         commands.put("show_reservations", new ShowReservationsCommand());
         commands.put("book_room", new BookRoomCommand());
+        commands.put("select_room", new SelectRoomCommand());
+        commands.put("find_room", new FindRoomCommand());
         commands.put("create_application", new CreateApplicationCommand());
         commands.put("remove_application", new RemoveApplicationCommand());
         commands.put("remove_application_admin", new RemoveApplicationAdminCommand());
