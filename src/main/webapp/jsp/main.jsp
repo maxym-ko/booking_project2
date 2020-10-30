@@ -14,12 +14,14 @@
 <body>
 <%@ include file="../jspf/page/navbar.jspf" %>
 
+
 <div class="container mt-5">
     <c:if test="${role == 'ADMIN'}">
         <%@ include file="../jspf/room/addRoom.jspf" %>
         <hr class="mt-2 mb-3"/>
     </c:if>
 
+    <%@ include file="../jspf/sort.jspf" %>
     <div class="card-columns">
         <c:forEach items="${rooms}" var="room">
             <c:if test="${room.status != 'UNAVAILABLE'}">

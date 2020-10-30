@@ -17,6 +17,7 @@ import java.util.List;
 public class RoomDaoImpl implements RoomDao {
     public static final String SQL_INSERT_ROOM = "INSERT INTO room (capacity, price, type, status) VALUES (?, ?, ?, ?)";
     private static final String SQL_FIND_ROOM_BY_ID = "SELECT * FROM room WHERE id=?";
+    private static final String SQL_FIND_ROOMS_ORDER_BY = "SELECT * FROM room ORDER BY %s";
     private static final String SQL_FIND_ALL_ROOMS = "SELECT * FROM room";
     private static final String SQL_DELETE_ROOM_BY_ID = "DELETE FROM room WHERE id=?";
     public static final String SQL_UPDATE_ROOM = "UPDATE room SET capacity=?, price=?, type=?, status=? WHERE id=?";
@@ -44,7 +45,9 @@ public class RoomDaoImpl implements RoomDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_ROOM_BY_ID)) {
             preparedStatement.setLong(1, id);
 
-            room = getRoomFromPreparedStatement(preparedStatement);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            room = getRoomFromResultSet(resultSet);
+            resultSet.close();
 
             connection.commit();
         } catch (SQLException ex) {
@@ -60,18 +63,27 @@ public class RoomDaoImpl implements RoomDao {
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_ROOMS)) {
 
-            while (resultSet.next()) {
-                rooms.add(Room.builder()
-                        .id(resultSet.getLong(Fields.ROOM_ID))
-                        .capacity(resultSet.getInt(Fields.ROOM_CAPACITY))
-                        .price(resultSet.getDouble(Fields.ROOM_PRICE))
-                        .type(RoomType.valueOf(resultSet.getString(Fields.ROOM_TYPE)))
-                        .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS)))
-                        .imgName(resultSet.getString(Fields.ROOM_IMG_NAME)).build());
-            }
+            rooms = getRoomsFromResultSet(resultSet);
 
             connection.commit();
         } catch (SQLException ex) {
+//            TODO: Catch exception
+        }
+        return rooms;
+    }
+
+    @Override
+    public List<Room> findRoomsOrderBy(String orderBy) {
+        List<Room> rooms = new ArrayList<>();
+        try (Connection connection = DBManager.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(String.format(SQL_FIND_ROOMS_ORDER_BY, orderBy))) {
+
+            rooms = getRoomsFromResultSet(resultSet);
+            resultSet.close();
+
+            connection.commit();
+        } catch (SQLException e) {
 //            TODO: Catch exception
         }
         return rooms;
@@ -108,19 +120,23 @@ public class RoomDaoImpl implements RoomDao {
         }
     }
 
-    private Room getRoomFromPreparedStatement(PreparedStatement preparedStatement) throws SQLException {
-        Room room = null;
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            room = Room.builder()
+    private List<Room> getRoomsFromResultSet(ResultSet resultSet) throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        while (resultSet.next()) {
+            rooms.add(Room.builder()
                     .id(resultSet.getLong(Fields.ROOM_ID))
                     .capacity(resultSet.getInt(Fields.ROOM_CAPACITY))
                     .price(resultSet.getDouble(Fields.ROOM_PRICE))
                     .type(RoomType.valueOf(resultSet.getString(Fields.ROOM_TYPE)))
                     .status(RoomStatus.valueOf(resultSet.getString(Fields.ROOM_STATUS)))
-                    .imgName(resultSet.getString(Fields.ROOM_IMG_NAME)).build();
+                    .imgName(resultSet.getString(Fields.ROOM_IMG_NAME)).build());
         }
-        resultSet.close();
-        return room;
+        return rooms;
+    }
+
+    private Room getRoomFromResultSet(ResultSet resultSet) throws SQLException {
+        List<Room> rooms = getRoomsFromResultSet(resultSet);
+        if (!rooms.isEmpty()) return rooms.get(0);
+        return null;
     }
 }

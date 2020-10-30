@@ -16,7 +16,15 @@ public class MainCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         RoomDao roomDao = new RoomDaoImpl();
-        List<Room> rooms = roomDao.findAllRooms();
+        List<Room> rooms;
+
+        String sort = request.getParameter("sort");
+        if (sort == null) {
+            rooms = roomDao.findAllRooms();
+        } else {
+            rooms = roomDao.findRoomsOrderBy(sort);
+        }
+
         request.getSession().setAttribute("rooms", rooms);
 
         return Path.PAGE_MAIN;
