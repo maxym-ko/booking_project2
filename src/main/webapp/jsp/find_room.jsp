@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
 
 <!DOCTYPE HTML>
 <html>
@@ -19,12 +23,12 @@
                     <img class="card-img-top" src="${pageContext.request.contextPath}/img/${room.imgName}"></c:if>
 
                 <div class="card-body">
-                    <p class="card-text">Capacity: ${room.capacity}</p>
-                    <p class="card-text">Type: <em>${room.type}</em></p>
-                    <p class="card-text">Price: <strong>${room.price}$</strong>(per night)</p>
+                    <p class="card-text"><fmt:message key="room.capacity"/>: ${room.capacity}</p>
+                    <p class="card-text"><fmt:message key="room.type"/>: <em>${room.type}</em></p>
+                    <p class="card-text"><fmt:message key="room.price"/>: <strong>${room.price}$</strong>(<fmt:message key="room.price.per_night"/>)</p>
 
                     <form action="<c:url value="/controller?command=select_room&id=${param.id}"/>" method="post">
-                        <button class="btn btn-primary" type="submit">Select</button>
+                        <button class="btn btn-primary" type="submit"><fmt:message key="room.add.select"/></button>
                         <input type="hidden" name="roomId" value="${room.id}">
                     </form>
 

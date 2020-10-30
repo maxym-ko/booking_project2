@@ -1,7 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="navbar-brand">Booking project</div>
+    <div class="navbar-brand"><fmt:message key="nav.project_name"/></div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,40 +13,53 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value="/controller"/>">Home</a>
+                <a class="nav-link" href="<c:url value="/controller"/>"><fmt:message key="nav.home"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value="/controller?command=about"/>">About</a>
+                <a class="nav-link" href="<c:url value="/controller?command=about"/>"><fmt:message key="nav.about"/></a>
             </li>
-<%--            <li class="nav-item dropdown">--%>
-<%--                <a class="nav-link dropdown-toggle" href="#" id="languageChanger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--%>
-<%--                    Language--%>
-<%--                </a>--%>
-<%--                <div class="dropdown-menu" aria-labelledby="languageChanger">--%>
-<%--                    <a class="dropdown-item" href="?lang=uk">Українська </a>--%>
-<%--                    <a class="dropdown-item" href="?lang=en">English </a>--%>
-<%--                </div>--%>
-<%--            </li>--%>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="languageChanger" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <fmt:message key="nav.language"/>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="languageChanger">
+                    <c:choose>
+                        <c:when test="${not fn:contains(pageContext.request.queryString, 'lang')}">
+                            <a class="dropdown-item" href="?${pageContext.request.queryString}&lang=uk">Українська</a>
+                            <a class="dropdown-item" href="?${pageContext.request.queryString}&lang=en">English</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="dropdown-item" href="?${fn:replace(pageContext.request.queryString, "lang=en", "lang=uk")}">Українська</a>
+                            <a class="dropdown-item" href="?${fn:replace(pageContext.request.queryString, "lang=uk", "lang=en")}">English</a>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </li>
         </ul>
         <c:set var="role" value="${sessionScope.user.role}" scope="page"/>
         <c:set var="username" value="${sessionScope.user.username}" scope="page"/>
 
         <c:choose>
             <c:when test="${role == 'ADMIN'}">
-                <a class="nav-link" href="<c:url value="/controller?command=show_applications_admin"/>">Manage application</a>
+                <a class="nav-link" href="<c:url value="/controller?command=show_applications_admin"/>"><fmt:message
+                        key="nav.manage_applications"/></a>
             </c:when>
             <c:when test="${role == 'USER'}">
-                <a class="nav-link" href="<c:url value="/controller?command=show_applications"/>">My applications</a>
-                <a class="nav-link" href="<c:url value="/controller?command=show_reservations"/>">My reservations</a>
+                <a class="nav-link" href="<c:url value="/controller?command=show_applications"/>"><fmt:message
+                        key="nav.my_applications"/></a>
+                <a class="nav-link" href="<c:url value="/controller?command=show_reservations"/>"><fmt:message
+                        key="nav.my_reservations"/></a>
             </c:when>
         </c:choose>
         <c:choose>
             <c:when test="${empty username}">
-                <a href="<c:url value="/controller?command=show_login"/>" class="btn btn-primary" role="button" aria-pressed="true">Login</a>
+                <a href="<c:url value="/controller?command=show_login"/>" class="btn btn-primary" role="button"
+                   aria-pressed="true"><fmt:message key="nav.login"/></a>
             </c:when>
             <c:otherwise>
                 <form action="<c:url value="/controller?command=logout"/>" method="post">
-                    <input class="btn btn-primary" type="submit" value="Sign out (${username})"/>
+                    <input class="btn btn-primary" type="submit" value="<fmt:message key="nav.sign_out"/> (${username})"/>
                 </form>
             </c:otherwise>
         </c:choose>

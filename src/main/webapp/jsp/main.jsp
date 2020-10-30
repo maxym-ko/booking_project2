@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
 
 <!DOCTYPE HTML>
 <html>
@@ -26,9 +30,9 @@
 
                     <div class="card-body">
                         <c:if test="${role != 'ADMIN'}">
-                            <p class="card-text">Capacity: ${room.capacity}</p>
-                            <p class="card-text">Type: <em>${room.type}</em></p>
-                            <p class="card-text">Price: <strong>${room.price}$</strong> (per night)</p>
+                            <p class="card-text"><fmt:message key="room.capacity"/>: ${room.capacity}</p>
+                            <p class="card-text"><fmt:message key="room.type"/>: <em>${room.type}</em></p>
+                            <p class="card-text"><fmt:message key="room.price"/>: <strong>${room.price}$</strong> (<fmt:message key="room.price.per_night"/>)</p>
                         </c:if>
                         <c:if test="${role == 'USER'}">
                             <%@ include file="../jspf/room/bookRoom.jspf" %>
@@ -37,7 +41,7 @@
                             <form action="<c:url value="/controller?command=change_room"/>" method="post">
                                 <input type="hidden" name="id" value="${room.id}">
                                 <div class="form-group row">
-                                    <label for="capacity" class="col-sm-6 col-form-label">Capacity: </label>
+                                    <label for="capacity" class="col-sm-6 col-form-label"><fmt:message key="room.capacity"/>: </label>
                                     <div class="col-sm-6">
                                         <input class="form-control" id="capacity" type="number" min="1"
                                                name="capacity"
@@ -45,23 +49,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="type" class="col-sm-6 col-form-label">Type: </label>
+                                    <label for="type" class="col-sm-6 col-form-label"><fmt:message key="room.type"/>: </label>
                                     <div class="col-sm-6">
                                         <select class="custom-select" id="type" name="type">
                                             <option <c:if test="${room.type == 'ECONOMY'}"> selected </c:if>
-                                                    value="ECONOMY">Economy
+                                                    value="ECONOMY"><fmt:message key="room.type.economy"/>
                                             </option>
                                             <option <c:if test="${room.type == 'STANDARD'}"> selected </c:if>
-                                                    value="STANDARD">Standard
+                                                    value="STANDARD"><fmt:message key="room.type.standard"/>
                                             </option>
                                             <option <c:if test="${room.type == 'LUXURY'}"> selected </c:if>
-                                                    value="LUXURY">Luxury
+                                                    value="LUXURY"><fmt:message key="room.type.luxury"/>
                                             </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="price" class="col-sm-6 col-form-label">Price ($ per night): </label>
+                                    <label for="price" class="col-sm-6 col-form-label"><fmt:message key="room.price"/> ($ <fmt:message key="room.price.per_night"/>): </label>
                                     <div class="col-sm-6">
                                         <input class="form-control" id="price" type="number" min="0" name="price"
                                                value="${room.price}">
@@ -70,7 +74,7 @@
                                 <div class="form-row ml-1">
                                     <div class="form-group mr-2">
                                         <form action="<c:url value="/controller?command=change_room"/>" method="post">
-                                            <button class="btn btn-secondary" type="submit">Change</button>
+                                            <button class="btn btn-secondary" type="submit"><fmt:message key="room.change"/></button>
                                         </form>
                                     </div>
                                 </div>
@@ -79,7 +83,7 @@
                             <div class="form-row ml-1">
                                 <div class="form-group mr-2">
                                     <form action="<c:url value="/controller?command=remove_room"/>" method="post">
-                                        <button class="btn btn-danger" type="submit">Remove</button>
+                                        <button class="btn btn-danger" type="submit"><fmt:message key="room.remove"/></button>
                                         <input type="hidden" name="id" value="${room.id}">
                                     </form>
                                 </div>

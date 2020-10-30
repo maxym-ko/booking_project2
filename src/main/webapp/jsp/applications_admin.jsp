@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
 
 <!DOCTYPE HTML>
 <html>
@@ -16,14 +20,13 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th style="width: 20%" scope="col">Room photo</th>
-            <th scope="col">Required capacity</th>
-            <th scope="col">Required type</th>
-            <th scope="col">Check in</th>
-            <th scope="col">Check out</th>
-            <th scope="col">Status</th>
-            <th scope="col">Price</th>
-            <th scope="col">Action</th>
+            <th style="width: 20%" scope="col"><fmt:message key="applications.image"/></th>
+            <th scope="col"><fmt:message key="applications.required_capacity"/></th>
+            <th scope="col"><fmt:message key="applications.required_type"/></th>
+            <th scope="col"><fmt:message key="applications.check_in"/></th>
+            <th scope="col"><fmt:message key="applications.check_out"/></th>
+            <th scope="col"><fmt:message key="applications.price"/></th>
+            <th scope="col"><fmt:message key="applications.action"/></th>
         </tr>
         </thead>
         <tbody>
@@ -42,17 +45,15 @@
                             <td>${application.requirementType}</td>
                             <td>${application.checkInDate}</td>
                             <td>${application.checkOutDate}</td>
-                            <td>${application.status}</td>
                             <td>${application.totalPrice}$</td>
                         </c:when>
                         <c:otherwise>
                             <th scope="row">${counter}</th>
-                            <td>Not selected yet</td>
+                            <td><fmt:message key="applications.image_not_selected"/></td>
                             <td>${application.requirementCapacity}</td>
                             <td>${application.requirementType}</td>
                             <td>${application.checkInDate}</td>
                             <td>${application.checkOutDate}</td>
-                            <td>${application.status}</td>
                             <td>?</td>
                         </c:otherwise>
                     </c:choose>
@@ -64,10 +65,10 @@
                                    type="submit" class="btn btn-success">
                                     <c:choose>
                                         <c:when test="${application.status == 'ACCEPT_WAITING'}">
-                                            Change
+                                            <fmt:message key="applications.action.change"/>
                                         </c:when>
                                         <c:otherwise>
-                                            Find
+                                            <fmt:message key="applications.action.find"/>
                                         </c:otherwise>
                                     </c:choose>
                                 </a>
@@ -75,7 +76,8 @@
                             <div class="form-group col-md-6">
                                 <form action="<c:url value="/controller?command=remove_application_admin"/>"
                                       method="post">
-                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                    <button type="submit" class="btn btn-danger"><fmt:message
+                                            key="applications.action.remove"/></button>
                                     <input type="hidden" name="id" value="${application.id}">
                                 </form>
                             </div>

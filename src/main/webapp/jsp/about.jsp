@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
 
 <!DOCTYPE HTML>
 <html>
@@ -12,23 +16,10 @@
 
 
 <div class="container mt-5">
-    <h2>Hotel</h2>
+    <h2><fmt:message key="about.hotel"/></h2>
+    <c:out value="${param.lang}" />
 
-    <p class="text-left">Клієнт реєструється в системі і складає Заявку, в якій вказує кількість місць, клас
-        апартаментів і час
-        перебування. Так само клієнт може обрати номер зі списку доступних номерів і забронювати його.<br>
-        Незареєстрований користувач не може залишити заявку або забронювати номер.<br>
-        Для переліку номерів реалізувати сортування:<br>
-        - за ціною;<br>
-        - за кількістю місць;<br>
-        - за класом;<br>
-        - за статусом (вільний, заброньований, зайнятий, недоступний).<br>
-        Менеджер переглядає заявки, що надішли, виділяє найбільш вподобаний з доступних номерів і відправляє запит
-        клієнту на підтвердження бронювання.<br> Запит відображається в особистому кабінеті користувача. Після того,
-        як
-        номер заброньовано, система виставляє клієнту Рахунок, який необхідно сплатити протягом двох днів. Якщо
-        рахунок
-        не сплачений, бронь автоматично знімається.</p>
+    <p class="text-left"><fmt:message key="about.info"/></p>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>
