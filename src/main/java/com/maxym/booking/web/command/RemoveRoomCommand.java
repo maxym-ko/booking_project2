@@ -22,6 +22,6 @@ public class RemoveRoomCommand implements Command {
         long roomId = Long.parseLong(request.getParameter("id"));
         new RoomDaoImpl().deleteRoomById(roomId);
 
-        return Path.REDIRECT_MAIN;
+        return Path.REDIRECT_HOME;
     }
 }

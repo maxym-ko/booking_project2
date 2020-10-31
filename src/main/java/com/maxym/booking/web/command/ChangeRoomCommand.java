@@ -36,6 +36,6 @@ public class ChangeRoomCommand implements Command {
 
         new RoomDaoImpl().updateRoom(room);
 
-        return Path.REDIRECT_MAIN;
+        return Path.REDIRECT_HOME;
     }
 }

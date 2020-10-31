@@ -13,6 +13,6 @@ public class LogoutCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
 
-        return Path.REDIRECT_MAIN;
+        return Path.REDIRECT_HOME;
     }
 }

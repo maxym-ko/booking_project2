@@ -34,7 +34,7 @@ public class AddRoomCommand implements Command {
 
         new RoomDaoImpl().saveRoom(room);
 
-        return Path.REDIRECT_MAIN;
+        return Path.REDIRECT_HOME;
     }
 
 //    private void saveImgToRoom(MultipartFile file, Room room) throws IOException {

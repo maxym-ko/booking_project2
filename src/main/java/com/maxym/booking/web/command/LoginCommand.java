@@ -39,6 +39,6 @@ public class LoginCommand implements Command {
 
         session.setAttribute("user", user);
 
-        return Path.REDIRECT_MAIN;
+        return Path.REDIRECT_HOME;
     }
 }
