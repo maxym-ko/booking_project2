@@ -16,8 +16,7 @@ public class CommandContainer {
         commands.put("show_registration", new ShowRegistrationCommand());
         commands.put("registration", new RegistrationCommand());
         commands.put("logout", new LogoutCommand());
-        commands.put("show_applications", new ShowApplicationsUserCommand());
-        commands.put("show_applications_admin", new ShowApplicationsAdminCommand());
+        commands.put("show_applications", new ShowApplicationsCommand());
         commands.put("show_reservations", new ShowReservationsCommand());
         commands.put("add_room", new AddRoomCommand());
         commands.put("change_room", new ChangeRoomCommand());
@@ -29,7 +28,6 @@ public class CommandContainer {
         commands.put("accept_application", new AcceptApplicationCommand());
         commands.put("reject_application", new RejectApplicationCommand());
         commands.put("remove_application", new RemoveApplicationCommand());
-        commands.put("remove_application_admin", new RemoveApplicationAdminCommand());
         commands.put("confirm_payment", new ConfirmPaymentCommand());
     }
 

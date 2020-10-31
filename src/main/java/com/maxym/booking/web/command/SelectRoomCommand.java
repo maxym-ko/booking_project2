@@ -44,6 +44,6 @@ public class SelectRoomCommand implements Command {
         bill.setId(billDao.saveBill(bill));
         applicationDao.updateApplication(application);
 
-        return Path.REDIRECT_APPLICATIONS_ADMIN;
+        return Path.REDIRECT_APPLICATIONS;
     }
 }

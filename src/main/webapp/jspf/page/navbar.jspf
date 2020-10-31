@@ -42,7 +42,7 @@
 
         <c:choose>
             <c:when test="${role == 'ADMIN'}">
-                <a class="nav-link" href="<c:url value="/controller?command=show_applications_admin"/>"><fmt:message
+                <a class="nav-link" href="<c:url value="/controller?command=show_applications"/>"><fmt:message
                         key="nav.manage_applications"/></a>
             </c:when>
             <c:when test="${role == 'USER'}">
