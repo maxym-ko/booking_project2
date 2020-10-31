@@ -33,29 +33,23 @@
                 <a class="page-link" href="#" tabindex="-1"><fmt:message key="room.sort_by"/></a>
             </li>
             <li class="page-item active">
-                <c:if test="${param.sort == 'capacity'}">
-                    <c:set var="queryParamCapacitySort"
-                           value="${fn:replace(queryParamCapacitySort, 'sort=capacity', 'sort=-capacity')}"/>
-                </c:if>
-                <a class="page-link" href="${queryParamCapacitySort}" tabindex="-1">
+                <a class="page-link"
+                   href="${param.sort == 'capacity' ? fn:replace(queryParamCapacitySort, 'sort=capacity', 'sort=-capacity') : queryParamCapacitySort}"
+                   tabindex="-1">
                     <fmt:message key="room.capacity"/>
                 </a>
             </li>
             <li class="page-item active">
-                <c:if test="${param.sort == 'price'}">
-                    <c:set var="queryParamPriceSort"
-                           value="${fn:replace(queryParamPriceSort, 'sort=price', 'sort=-price')}"/>
-                </c:if>
-                <a class="page-link" href="${queryParamPriceSort}" tabindex="-1">
+                <a class="page-link"
+                   href="${param.sort == 'price' ? fn:replace(queryParamPriceSort, 'sort=price', 'sort=-price') : queryParamPriceSort}"
+                   tabindex="-1">
                     <fmt:message key="room.price"/>
                 </a>
             </li>
             <li class="page-item active">
-                <c:if test="${param.sort == 'type'}">
-                    <c:set var="queryParamTypeSort"
-                           value="${fn:replace(queryParamTypeSort, 'sort=type', 'sort=-type')}"/>
-                </c:if>
-                <a class="page-link" href="${queryParamTypeSort}" tabindex="-1">
+                <a class="page-link"
+                   href="${param.sort == 'type' ? fn:replace(queryParamTypeSort, 'sort=type', 'sort=-type') : queryParamTypeSort}"
+                   tabindex="-1">
                     <fmt:message key="room.type"/>
                 </a>
             </li>
