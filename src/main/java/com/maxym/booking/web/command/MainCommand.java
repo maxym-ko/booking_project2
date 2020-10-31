@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class MainCommand implements Command {
-
     private static final long serialVersionUID = -1833860940525215145L;
 
     @Override
@@ -18,15 +17,29 @@ public class MainCommand implements Command {
         RoomDao roomDao = new RoomDaoImpl();
         List<Room> rooms;
 
-        String sort = request.getParameter("sort");
-        if (sort == null) {
-            rooms = roomDao.findAllRooms();
+        int recordsPerPage = 6;
+        int noOfPages = (int) ((roomDao.getNumberOfRows() + 1.) / recordsPerPage);
+        String tmp = request.getParameter("page");
+        System.out.println(tmp);
+        int currentPage;
+        if (tmp != null && tmp.matches("^[0-9]*$")) {
+            currentPage = Integer.parseInt(tmp);
         } else {
-            rooms = roomDao.findRoomsOrderBy(sort);
+            currentPage = 1;
+        }
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", currentPage);
+
+        int from = (currentPage - 1) * recordsPerPage;
+        int to = from + recordsPerPage;
+        String sort = request.getParameter("sort");
+        System.out.println(sort);
+        if (sort == null) {
+            rooms = roomDao.findRoomsFromTo(from, to);
+        } else {
+            rooms = roomDao.findRoomsFromToOrderBy(sort, from, to);
         }
         request.setAttribute("rooms", rooms);
-
-        request.getSession().setAttribute("rooms", rooms);
 
         return Path.PAGE_MAIN;
     }

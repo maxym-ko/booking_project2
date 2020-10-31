@@ -1,0 +1,42 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
+
+<c:set var="queryString" value="${pageContext.request.queryString}"/>
+
+<div class="container mr-3">
+    <div class="row">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1"><fmt:message key="room.pager"/></a>
+            </li>
+            <c:forEach begin="1" end="${requestScope.noOfPages}" varStatus="loop">
+                <c:choose>
+                    <c:when test="${loop.count == requestScope.currentPage}">
+                        <li class="page-item active">
+                            <a class="page-link" href="#" tabindex="-1">${loop.count}</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item">
+                            <c:choose>
+                                <c:when test="${empty param.page}">
+                                    <a class="page-link" href="?${queryString}<c:if test="${not empty queryString}">&</c:if>page=${loop.count}"
+                                       tabindex="-1">${loop.count}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a class="page-link"
+                                       href="?${fn:replace(queryString, 'page='.concat(param.page), 'page='.concat(loop.count))}"
+                                       tabindex="-1">${loop.count}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </ul>
+    </div>
+</div>

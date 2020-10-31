@@ -8,7 +8,9 @@ public interface RoomDao {
     void saveRoom(Room room);
     Room findRoomById(long id);
     List<Room> findAllRooms();
-    List<Room> findRoomsOrderBy(String orderBy);
+    List<Room> findRoomsFromTo(int from, int to);
+    List<Room> findRoomsFromToOrderBy(String orderBy, int from, int to);
     void updateRoom(Room room);
     void deleteRoomById(long id);
+    int getNumberOfRows();
 }

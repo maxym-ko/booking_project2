@@ -2,12 +2,9 @@ package com.maxym.booking.db.dao.impl;
 
 import com.maxym.booking.db.Fields;
 import com.maxym.booking.db.dao.RoomDao;
-import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
 import com.maxym.booking.db.entity.room.RoomType;
-import com.maxym.booking.db.entity.user.Role;
-import com.maxym.booking.db.entity.user.User;
 import com.maxym.booking.db.util.DBManager;
 
 import java.sql.*;
@@ -17,10 +14,12 @@ import java.util.List;
 public class RoomDaoImpl implements RoomDao {
     public static final String SQL_INSERT_ROOM = "INSERT INTO room (capacity, price, type, status) VALUES (?, ?, ?, ?)";
     private static final String SQL_FIND_ROOM_BY_ID = "SELECT * FROM room WHERE id=?";
-    private static final String SQL_FIND_ROOMS_ORDER_BY = "SELECT * FROM room ORDER BY %s";
+    private static final String SQL_FIND_ROOMS_FROM_TO = "SELECT * FROM room LIMIT ?,?";
+    private static final String SQL_FIND_ROOMS_FROM_TO_ORDER_BY = "SELECT * FROM room ORDER BY %s LIMIT ?,?";
     private static final String SQL_FIND_ALL_ROOMS = "SELECT * FROM room";
     private static final String SQL_DELETE_ROOM_BY_ID = "DELETE FROM room WHERE id=?";
     public static final String SQL_UPDATE_ROOM = "UPDATE room SET capacity=?, price=?, type=?, status=? WHERE id=?";
+    public static final String SQL_COUNT_ROWS = "SELECT COUNT(*) FROM room;";
 
     @Override
     public void saveRoom(Room room) {
@@ -73,17 +72,29 @@ public class RoomDaoImpl implements RoomDao {
     }
 
     @Override
-    public List<Room> findRoomsOrderBy(String orderBy) {
+    public List<Room> findRoomsFromTo(int from, int to) {
+        return findRoomsFromToBySql(SQL_FIND_ROOMS_FROM_TO, from, to);
+    }
+
+    @Override
+    public List<Room> findRoomsFromToOrderBy(String orderBy, int from, int to) {
+        return findRoomsFromToBySql(String.format(SQL_FIND_ROOMS_FROM_TO_ORDER_BY, orderBy), from, to);
+    }
+
+    private List<Room> findRoomsFromToBySql(String sql, int from, int to) {
         List<Room> rooms = new ArrayList<>();
         try (Connection connection = DBManager.getInstance().getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(String.format(SQL_FIND_ROOMS_ORDER_BY, orderBy))) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, from);
+            preparedStatement.setInt(2, to);
 
+            ResultSet resultSet = preparedStatement.executeQuery();
             rooms = getRoomsFromResultSet(resultSet);
             resultSet.close();
 
             connection.commit();
         } catch (SQLException e) {
+            e.printStackTrace();
 //            TODO: Catch exception
         }
         return rooms;
@@ -118,6 +129,22 @@ public class RoomDaoImpl implements RoomDao {
         } catch (SQLException e) {
 //            TODO: Catch exception
         }
+    }
+
+    @Override
+    public int getNumberOfRows() {
+        int res = -1;
+        try (Connection connection = DBManager.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_COUNT_ROWS)) {
+
+            if (resultSet.next()) res = resultSet.getInt(1);
+
+            connection.commit();
+        } catch (SQLException ex) {
+//            TODO: Catch exception
+        }
+        return res;
     }
 
     private List<Room> getRoomsFromResultSet(ResultSet resultSet) throws SQLException {

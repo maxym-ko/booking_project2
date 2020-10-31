@@ -98,8 +98,10 @@
             </c:if>
         </c:forEach>
     </div>
+
+    <%@ include file="../jspf/pagination.jspf" %>
 </div>
 
-<jsp:include page="../jspf/page/footer.jspf"/>
+<%@ include file="../jspf/page/footer.jspf" %>
 </body>
 </html>
