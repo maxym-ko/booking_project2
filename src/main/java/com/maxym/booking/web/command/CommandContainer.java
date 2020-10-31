@@ -9,7 +9,7 @@ public class CommandContainer {
     static {
         commands.put("invalid", new InvalidCommand());
         commands.put("forbidden", new ForbiddenCommand());
-        commands.put("main", new MainCommand());
+        commands.put("home", new HomeCommand());
         commands.put("about", new AboutCommand());
         commands.put("show_login", new ShowLoginCommand());
         commands.put("login", new LoginCommand());
@@ -36,7 +36,7 @@ public class CommandContainer {
     private CommandContainer(){}
 
     public static Command get(String commandName) {
-        if (commandName == null) return commands.get("main");
+        if (commandName == null) return commands.get("home");
         if (!commands.containsKey(commandName)) return commands.get("invalid");
 
         return commands.get(commandName);
