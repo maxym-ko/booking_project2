@@ -10,7 +10,7 @@ public class ForbiddenCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute("message", "You don't have an access to this page");
+//        request.setAttribute("message", "You don't have an access to this page");
         return Path.PAGE_ERROR;
     }
 }

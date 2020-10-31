@@ -1,5 +1,11 @@
 package com.maxym.booking.web.command;
 
+import com.maxym.booking.Path;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -10,10 +16,10 @@ public class CommandContainer {
         commands.put("invalid", new InvalidCommand());
         commands.put("forbidden", new ForbiddenCommand());
         commands.put("home", new HomeCommand());
-        commands.put("about", new AboutCommand());
-        commands.put("show_login", new ShowLoginCommand());
+        commands.put("about", (request, response) -> Path.PAGE_ABOUT);
+        commands.put("show_login", (request, response) -> Path.PAGE_LOGIN);
         commands.put("login", new LoginCommand());
-        commands.put("show_registration", new ShowRegistrationCommand());
+        commands.put("show_registration", (request, response) -> Path.PAGE_REGISTRATION);
         commands.put("registration", new RegistrationCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("show_applications", new ShowApplicationsCommand());
