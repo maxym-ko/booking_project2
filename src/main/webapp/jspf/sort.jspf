@@ -12,9 +12,12 @@
         <ul class="pagination">
             <c:choose>
                 <c:when test="${empty param.sort}">
-                    <c:set var="queryParamCapacitySort" value="?${queryString}&page=1&sort=capacity"/>
-                    <c:set var="queryParamPriceSort" value="?${queryString}&page=1&sort=price"/>
-                    <c:set var="queryParamTypeSort" value="?${queryString}&page=1&sort=type"/>
+                    <c:set var="queryParamCapacitySort"
+                           value="?${fn:replace(queryString, 'page='.concat(param.page), '')}&page=1&sort=capacity"/>
+                    <c:set var="queryParamPriceSort"
+                           value="?${fn:replace(queryString, 'page='.concat(param.page), '')}&page=1&sort=price"/>
+                    <c:set var="queryParamTypeSort"
+                           value="?${fn:replace(queryString, 'page='.concat(param.page), '')}&page=1&sort=type"/>
                 </c:when>
                 <c:otherwise>
                     <c:set var="queryParamCapacitySort"
