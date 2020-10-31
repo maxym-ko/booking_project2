@@ -10,7 +10,6 @@ import com.maxym.booking.db.entity.application.ApplicationStatus;
 import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
-import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.db.entity.user.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ public class BookRoomCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null || user.getRole() != Role.USER) return Path.REDIRECT_FORBIDDEN_COMMAND;
 
         long roomId = Long.parseLong(request.getParameter("id"));
         RoomDao roomDao = new RoomDaoImpl();

@@ -8,7 +8,6 @@ import com.maxym.booking.db.entity.user.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 
 public class LoginCommand implements Command {
 
@@ -17,7 +16,6 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        if (session.getAttribute("user") != null) return Path.REDIRECT_FORBIDDEN_COMMAND;
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -29,13 +27,6 @@ public class LoginCommand implements Command {
         if (user == null || !password.equals(user.getPassword())) {
             return Path.PAGE_LOGIN;
         }
-//            Role userRole = Role.getRole(user);
-//
-//            if (userRole == Role.ADMIN)
-//                forward = Path.COMMAND__LIST_ORDERS;
-//
-//            if (userRole == Role.CLIENT)
-//                forward = Path.COMMAND__LIST_MENU;
 
         session.setAttribute("user", user);
 

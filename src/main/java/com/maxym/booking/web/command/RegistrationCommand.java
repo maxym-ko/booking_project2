@@ -15,8 +15,6 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("user") != null) return Path.REDIRECT_FORBIDDEN_COMMAND;
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String role = request.getParameter("role");

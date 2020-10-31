@@ -4,8 +4,6 @@ import com.maxym.booking.Path;
 import com.maxym.booking.db.dao.ApplicationDao;
 import com.maxym.booking.db.dao.impl.ApplicationDaoImpl;
 import com.maxym.booking.db.entity.application.Application;
-import com.maxym.booking.db.entity.user.Role;
-import com.maxym.booking.db.entity.user.User;
 import com.maxym.booking.web.util.Pagination;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +15,6 @@ public class ShowApplicationsCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession(false) == null) return Path.REDIRECT_FORBIDDEN_COMMAND;
-
         ApplicationDao applicationDao = new ApplicationDaoImpl();
         int[] pagesInfo = Pagination.paginateRequest(request, applicationDao.countApplications(), 5);
         int[] scope = Pagination.getScope(pagesInfo[0], pagesInfo[1]);

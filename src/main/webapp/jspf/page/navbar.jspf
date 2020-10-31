@@ -37,7 +37,7 @@
                 </div>
             </li>
         </ul>
-        <c:set var="role" value="${sessionScope.user.role}" scope="page"/>
+        <c:set var="role" value="${sessionScope.user.role}" scope="session"/>
         <c:set var="username" value="${sessionScope.user.username}" scope="page"/>
 
         <c:choose>

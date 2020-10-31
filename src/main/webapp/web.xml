@@ -14,6 +14,36 @@
     </servlet-mapping>
 
     <filter>
+        <filter-name>AccessFilter</filter-name>
+        <filter-class>com.maxym.booking.web.filter.AccessFilter</filter-class>
+        <init-param>
+            <param-name>admin</param-name>
+            <param-value>add_room change_room remove_room select_room find_room</param-value>
+        </init-param>
+        <init-param>
+            <param-name>user</param-name>
+            <param-value>show_reservations book_room create_application accept_application reject_application confirm_payment</param-value>
+        </init-param>
+        <init-param>
+            <param-name>guest</param-name>
+            <param-value>show_login login show_registration registration</param-value>
+        </init-param>
+        <init-param>
+            <param-name>common</param-name>
+            <param-value>logout show_applications</param-value>
+        </init-param>
+        <init-param>
+            <param-name>out-of-control</param-name>
+            <param-value>invalid forbidden home about</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AccessFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
         <filter-name>LocaleFilter</filter-name>
         <filter-class>com.maxym.booking.web.filter.LocaleFilter</filter-class>
     </filter>

@@ -11,8 +11,6 @@ import com.maxym.booking.db.entity.application.Application;
 import com.maxym.booking.db.entity.application.ApplicationStatus;
 import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.entity.room.Room;
-import com.maxym.booking.db.entity.user.Role;
-import com.maxym.booking.db.entity.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +20,6 @@ public class SelectRoomCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null || user.getRole() != Role.ADMIN) return Path.REDIRECT_FORBIDDEN_COMMAND;
-
         long applicationId = Long.parseLong(request.getParameter("id"));
         long roomId = Long.parseLong(request.getParameter("roomId"));
 
