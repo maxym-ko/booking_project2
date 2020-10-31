@@ -31,66 +31,63 @@
         </thead>
         <tbody>
 
-        <c:set var="counter" value="1"/>
-        <c:forEach items="${requestScope.applications}" var="application">
-            <c:if test="${application.status == 'LOOKING_FOR' or application.status == 'ACCEPT_WAITING'}">
-                <tr>
-                    <c:choose>
-                        <c:when test="${application.status != 'LOOKING_FOR'}">
-                            <th scope="row">${counter}</th>
-                            <td><img class="img-thumbnail"
-                                     src="${pageContext.request.contextPath}/img/${application.room.imgName}">
-                            </td>
-                            <td>${application.requirementCapacity}</td>
-                            <td>${application.requirementType}</td>
-                            <td>${application.checkInDate}</td>
-                            <td>${application.checkOutDate}</td>
-                            <td>${application.totalPrice}$</td>
-                        </c:when>
-                        <c:otherwise>
-                            <th scope="row">${counter}</th>
-                            <td><fmt:message key="applications.image_not_selected"/></td>
-                            <td>${application.requirementCapacity}</td>
-                            <td>${application.requirementType}</td>
-                            <td>${application.checkInDate}</td>
-                            <td>${application.checkOutDate}</td>
-                            <td>?</td>
-                        </c:otherwise>
-                    </c:choose>
+        <c:forEach items="${requestScope.applications}" var="application" varStatus="loop">
+            <tr>
+                <c:choose>
+                    <c:when test="${application.status != 'LOOKING_FOR'}">
+                        <th scope="row">${loop.count + (empty param.page ? 0 : param.page - 1) * requestScope.recordsPerPage}</th>
+                        <td><img class="img-thumbnail"
+                                 src="${pageContext.request.contextPath}/img/${application.room.imgName}">
+                        </td>
+                        <td>${application.requirementCapacity}</td>
+                        <td>${application.requirementType}</td>
+                        <td>${application.checkInDate}</td>
+                        <td>${application.checkOutDate}</td>
+                        <td>${application.totalPrice}$</td>
+                    </c:when>
+                    <c:otherwise>
+                        <th scope="row">${loop.count + (empty param.page ? 0 : param.page - 1) * requestScope.recordsPerPage}</th>
+                        <td><fmt:message key="applications.image_not_selected"/></td>
+                        <td>${application.requirementCapacity}</td>
+                        <td>${application.requirementType}</td>
+                        <td>${application.checkInDate}</td>
+                        <td>${application.checkOutDate}</td>
+                        <td>?</td>
+                    </c:otherwise>
+                </c:choose>
 
-                    <td>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <a href="<c:url value="/controller?command=find_room&id=${application.id}"/>"
-                                   type="submit" class="btn btn-success">
-                                    <c:choose>
-                                        <c:when test="${application.status == 'ACCEPT_WAITING'}">
-                                            <fmt:message key="applications.action.change"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <fmt:message key="applications.action.find"/>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </a>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <form action="<c:url value="/controller?command=remove_application_admin"/>"
-                                      method="post">
-                                    <button type="submit" class="btn btn-danger"><fmt:message
-                                            key="applications.action.remove"/></button>
-                                    <input type="hidden" name="id" value="${application.id}">
-                                </form>
-                            </div>
+                <td>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <a href="<c:url value="/controller?command=find_room&id=${application.id}"/>"
+                               type="submit" class="btn btn-success">
+                                <c:choose>
+                                    <c:when test="${application.status == 'ACCEPT_WAITING'}">
+                                        <fmt:message key="applications.action.change"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <fmt:message key="applications.action.find"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </a>
                         </div>
+                        <div class="form-group col-md-6">
+                            <form action="<c:url value="/controller?command=remove_application_admin"/>"
+                                  method="post">
+                                <button type="submit" class="btn btn-danger"><fmt:message
+                                        key="applications.action.remove"/></button>
+                                <input type="hidden" name="id" value="${application.id}">
+                            </form>
+                        </div>
+                    </div>
 
-                    </td>
-                </tr>
-
-                <c:set var="counter" value="${counter + 1}"/>
-            </c:if>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
+
+    <%@ include file="../jspf/pagination.jspf" %>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>

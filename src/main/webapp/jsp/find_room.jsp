@@ -15,6 +15,7 @@
 <%@ include file="../jspf/page/navbar.jspf" %>
 
 <div class="container mt-5">
+    <%@ include file="../jspf/sort.jspf" %>
     <div class="card-columns">
         <c:forEach items="${rooms}" var="room">
             <c:if test="${room.status != 'UNAVAILABLE'}">
@@ -37,6 +38,8 @@
             </div>
         </c:forEach>
     </div>
+
+    <%@ include file="../jspf/pagination.jspf" %>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>

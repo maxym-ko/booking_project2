@@ -32,7 +32,7 @@
 
         <c:forEach items="${requestScope.reservations}" var="reservation" varStatus="loop">
             <tr>
-                <th scope="row">${loop.index + 1}</th>
+                <th scope="row">${loop.count + (empty param.page ? 0 : param.page - 1) * requestScope.recordsPerPage}</th>
                 <td><img class="img-thumbnail" src="${pageContext.request.contextPath}/img/${reservation.room.imgName}">
                 </td>
                 <td>${reservation.room.capacity}</td>
@@ -71,6 +71,8 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <%@ include file="../jspf/pagination.jspf" %>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>

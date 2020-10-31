@@ -9,7 +9,6 @@ import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomType;
 import com.maxym.booking.db.entity.user.User;
 import com.maxym.booking.db.util.DBManager;
-import sun.security.krb5.internal.APOptions;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,8 +20,10 @@ public class ApplicationDaoImpl implements ApplicationDao {
     public static final String SQL_INSERT_RESERVATION = "INSERT INTO application " +
             "(check_in_date, check_out_date, status, total_price, bill_id, user_id, room_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_APPLICATION_BY_ID = "SELECT * FROM application WHERE id=?";
-    private static final String SQL_FIND_ALL_APPLICATIONS = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME'";
-    private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED'";
+    private static final String SQL_FIND_ALL_APPLICATIONS = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY -id";
+    private static final String SQL_FIND_APPLICATIONS_FROM_TO = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY -id LIMIT %d,%d";
+    private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY -id";
+    private static final String SQL_FIND_RESERVATIONS_FROM_TO = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY -id LIMIT %d,%d";
     private static final String SQL_DELETE_APPLICATION_BY_ID = "DELETE FROM application WHERE id=?";
     private static final String SQL_CONFIRM_APPLICATION_BY_ID = "UPDATE application SET status = 'PAYMENT_WAITING' WHERE id=?";
     private static final String SQL_REJECT_APPLICATION_BY_ID = "UPDATE application SET status = 'LOOKING_FOR', room_id=null WHERE id=?";
@@ -30,6 +31,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
     private static final String SQL_UPDATE_APPLICATION = "UPDATE application SET " +
             "check_in_date=?, check_out_date=?, status=?, total_price=?, bill_id=?, room_id=? " +
             "WHERE id=?";
+    public static final String SQL_COUNT_APPLICATIONS = "SELECT COUNT(*) FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME'";
+    public static final String SQL_COUNT_RESERVATIONS = "SELECT COUNT(*) FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED'";
 
     @Override
     public void saveApplication(Application application) {
@@ -65,19 +68,6 @@ public class ApplicationDaoImpl implements ApplicationDao {
             connection.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
-//            TODO: Catch exception
-        }
-    }
-
-    @Override
-    public void confirmApplicationPaymentById(long id) {
-        try (Connection connection = DBManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_CONFIRM_APPLICATION_PAYMENT_BY_ID)) {
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-
-            connection.commit();
-        } catch (SQLException e) {
 //            TODO: Catch exception
         }
     }
@@ -143,13 +133,30 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
+    public void confirmApplicationPaymentById(long id) {
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_CONFIRM_APPLICATION_PAYMENT_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
+    }
+
+    @Override
     public Application findApplicationById(long id) {
         Application application = null;
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_APPLICATION_BY_ID)) {
             preparedStatement.setLong(1, id);
 
-            application = getApplicationFromPreparedStatement(preparedStatement);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                application = mapApplication(resultSet, false);
+            }
+            resultSet.close();
 
             connection.commit();
         } catch (SQLException ex) {
@@ -160,22 +167,57 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findAllApplications() {
-        return findAllApplicationsBySqlStatement(SQL_FIND_ALL_APPLICATIONS, false);
+        return findApplicationsBySql(SQL_FIND_ALL_APPLICATIONS, false);
+    }
+
+    @Override
+    public List<Application> findApplicationsFromScope(int from, int to) {
+        return findApplicationsBySql(String.format(SQL_FIND_APPLICATIONS_FROM_TO, from, to), false);
     }
 
     @Override
     public List<Application> findAllReservations() {
-        return findAllApplicationsBySqlStatement(SQL_FIND_ALL_RESERVATIONS, true);
+        return findApplicationsBySql(SQL_FIND_ALL_RESERVATIONS, true);
     }
 
-    private List<Application> findAllApplicationsBySqlStatement(String sqlStatement, boolean isReservation) {
+    @Override
+    public List<Application> findReservationsFromScope(int from, int to) {
+        return findApplicationsBySql(String.format(SQL_FIND_RESERVATIONS_FROM_TO, from, to), true);
+    }
+
+    @Override
+    public int countApplications() {
+        return countBySql(SQL_COUNT_APPLICATIONS);
+    }
+
+    @Override
+    public int countReservations() {
+        return countBySql(SQL_COUNT_RESERVATIONS);
+    }
+
+    private int countBySql(String sql) {
+        int res = -1;
+        try (Connection connection = DBManager.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            if (resultSet.next()) res = resultSet.getInt(1);
+
+            connection.commit();
+        } catch (SQLException ex) {
+//            TODO: Catch exception
+        }
+        return res;
+    }
+
+    private List<Application> findApplicationsBySql(String sql, boolean isReservation) {
         List<Application> applications = new ArrayList<>();
         try (Connection connection = DBManager.getInstance().getConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
-                applications.add(getApplicationFromResultSet(resultSet, isReservation));
+                applications.add(mapApplication(resultSet, isReservation));
             }
 
             connection.commit();
@@ -185,17 +227,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
         return applications;
     }
 
-    private Application getApplicationFromPreparedStatement(PreparedStatement preparedStatement) throws SQLException {
-        Application application = null;
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            application = getApplicationFromResultSet(resultSet, false);
-        }
-        resultSet.close();
-        return application;
-    }
-
-    private Application getApplicationFromResultSet(ResultSet resultSet, boolean isReservation) throws SQLException {
+    private Application mapApplication(ResultSet resultSet, boolean isReservation) throws SQLException {
         Bill bill = new BillDaoImpl().findBillById(resultSet.getLong(Fields.APPLICATION_BILL_ID));
         User owner = new UserDaoImpl().findUserById(resultSet.getLong(Fields.APPLICATION_USER_ID));
         Room room = new RoomDaoImpl().findRoomById(resultSet.getLong(Fields.APPLICATION_ROOM_ID));

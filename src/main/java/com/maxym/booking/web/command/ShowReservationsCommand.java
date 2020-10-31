@@ -7,6 +7,7 @@ import com.maxym.booking.db.entity.application.Application;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.db.entity.user.User;
+import com.maxym.booking.web.util.Pagination;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +23,10 @@ public class ShowReservationsCommand implements Command {
         if (user == null || user.getRole() != Role.USER) return Path.REDIRECT_FORBIDDEN_COMMAND;
 
         ApplicationDao applicationDao = new ApplicationDaoImpl();
-        List<Application> reservations = applicationDao.findAllReservations();
+        int[] pagesInfo = Pagination.paginateRequest(request, applicationDao.countReservations(), 5);
+        int[] scope = Pagination.getScope(pagesInfo[0], pagesInfo[1]);
+
+        List<Application> reservations = applicationDao.findReservationsFromScope(scope[0], scope[1]);
         request.setAttribute("reservations", reservations);
 
         return Path.PAGE_RESERVATIONS;
