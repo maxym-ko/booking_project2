@@ -24,6 +24,7 @@ public class MainCommand implements Command {
         } else {
             rooms = roomDao.findRoomsOrderBy(sort);
         }
+        request.setAttribute("rooms", rooms);
 
         request.getSession().setAttribute("rooms", rooms);
 

@@ -32,7 +32,7 @@
         <tbody>
 
         <c:set var="counter" value="1"/>
-        <c:forEach items="${applications}" var="application">
+        <c:forEach items="${requestScope.applications}" var="application">
             <c:if test="${application.status == 'LOOKING_FOR' or application.status == 'ACCEPT_WAITING'}">
                 <tr>
                     <c:choose>

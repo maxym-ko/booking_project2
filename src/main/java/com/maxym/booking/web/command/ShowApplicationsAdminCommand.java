@@ -21,7 +21,7 @@ public class ShowApplicationsAdminCommand implements Command {
 
         ApplicationDao applicationDao = new ApplicationDaoImpl();
         List<Application> applications = applicationDao.findAllApplications();
-        request.getSession().setAttribute("applications", applications);
+        request.setAttribute("applications", applications);
 
         return Path.PAGE_APPLICATIONS_ADMIN;
     }

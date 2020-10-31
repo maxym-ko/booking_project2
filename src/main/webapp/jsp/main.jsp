@@ -23,7 +23,7 @@
 
     <%@ include file="../jspf/sort.jspf" %>
     <div class="card-columns">
-        <c:forEach items="${rooms}" var="room">
+        <c:forEach items="${requestScope.rooms}" var="room">
             <c:if test="${room.status != 'UNAVAILABLE'}">
                 <div class="card border-dark bg-light mb-3">
                     <c:if test="${not empty room.imgName}">

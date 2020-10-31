@@ -23,7 +23,7 @@ public class ShowReservationsCommand implements Command {
 
         ApplicationDao applicationDao = new ApplicationDaoImpl();
         List<Application> reservations = applicationDao.findAllReservations();
-        request.getSession().setAttribute("reservations", reservations);
+        request.setAttribute("reservations", reservations);
 
         return Path.PAGE_RESERVATIONS;
     }

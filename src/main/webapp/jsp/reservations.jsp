@@ -30,7 +30,7 @@
         </thead>
         <tbody>
 
-        <c:forEach items="${reservations}" var="reservation" varStatus="loop">
+        <c:forEach items="${requestScope.reservations}" var="reservation" varStatus="loop">
             <tr>
                 <th scope="row">${loop.index + 1}</th>
                 <td><img class="img-thumbnail" src="${pageContext.request.contextPath}/img/${reservation.room.imgName}">
