@@ -30,13 +30,13 @@ public class SelectRoomCommand implements Command {
         Application application = applicationDao.findApplicationById(applicationId);
         Room room = roomDao.findRoomById(roomId);
         Bill bill = new Bill(application.getCheckInDate(), application.getCheckOutDate(), room.getPrice());
+        bill.setId(billDao.saveBill(bill));
 
         application.setBill(bill);
         application.setRoom(room);
         application.setStatus(ApplicationStatus.ACCEPT_WAITING);
         application.setTotalPrice(bill.getTotalPrice());
 
-        bill.setId(billDao.saveBill(bill));
         applicationDao.updateApplication(application);
 
         return Path.REDIRECT_APPLICATIONS;

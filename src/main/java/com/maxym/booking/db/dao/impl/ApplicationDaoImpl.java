@@ -33,6 +33,9 @@ public class ApplicationDaoImpl implements ApplicationDao {
             "WHERE id=?";
     public static final String SQL_COUNT_APPLICATIONS = "SELECT COUNT(*) FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME'";
     public static final String SQL_COUNT_RESERVATIONS = "SELECT COUNT(*) FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED'";
+    public static final String SQL_CREATE_EVENT_FOR_APPLICATION_TO_DELETE_AFTER_2_DAYS = "CREATE EVENT application_delete_%d " +
+            "ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 2 DAY " +
+            "DO DELETE FROM application WHERE id=?";
 
     @Override
     public void saveApplication(Application application) {
@@ -55,7 +58,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Override
     public void saveReservation(Application application) {
         try (Connection connection = DBManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_RESERVATION)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_RESERVATION, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDate(1, application.getCheckInDate());
             preparedStatement.setDate(2, application.getCheckOutDate());
             preparedStatement.setString(3, application.getStatus().name());
@@ -65,7 +68,13 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.setLong(7, application.getRoom().getId());
 
             preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next())
+                application.setId(resultSet.getLong(1));
+
             connection.commit();
+
+            startEventToDeleteApplicationById(connection, application.getId());
         } catch (SQLException ex) {
             ex.printStackTrace();
 //            TODO: Catch exception
@@ -80,6 +89,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
+
+            startEventToDeleteApplicationById(connection, id);
         } catch (SQLException e) {
 //            TODO: Catch exception
         }
@@ -240,5 +251,16 @@ public class ApplicationDaoImpl implements ApplicationDao {
                 .status(ApplicationStatus.valueOf(resultSet.getString(Fields.APPLICATION_STATUS)))
                 .totalPrice(resultSet.getDouble(Fields.APPLICATION_TOTAL_PRICE))
                 .bill(bill).owner(owner).room(room).build();
+    }
+
+    private void startEventToDeleteApplicationById(Connection connection, long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(SQL_CREATE_EVENT_FOR_APPLICATION_TO_DELETE_AFTER_2_DAYS, id))) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+//            TODO: Catch exception
+        }
     }
 }
