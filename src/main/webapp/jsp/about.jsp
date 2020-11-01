@@ -17,7 +17,6 @@
 
 <div class="container mt-5">
     <h2><fmt:message key="about.hotel"/></h2>
-    <c:out value="${param.lang}" />
 
     <p class="text-left"><fmt:message key="about.info"/></p>
 </div>
