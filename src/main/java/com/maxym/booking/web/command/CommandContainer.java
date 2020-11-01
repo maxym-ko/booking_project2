@@ -27,6 +27,7 @@ public class CommandContainer {
         commands.put("add_room", new AddRoomCommand());
         commands.put("change_room", new ChangeRoomCommand());
         commands.put("remove_room", new RemoveRoomCommand());
+        commands.put("search_rooms", new SearchRoomCommand());
         commands.put("book_room", new BookRoomCommand());
         commands.put("select_room", new SelectRoomCommand());
         commands.put("find_room", new FindRoomCommand());

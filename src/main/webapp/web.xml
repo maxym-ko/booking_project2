@@ -22,7 +22,7 @@
         </init-param>
         <init-param>
             <param-name>user</param-name>
-            <param-value>show_reservations book_room create_application accept_application reject_application confirm_payment</param-value>
+            <param-value>show_reservations book_room create_application accept_application reject_application confirm_payment search_rooms</param-value>
         </init-param>
         <init-param>
             <param-name>guest</param-name>

@@ -16,8 +16,9 @@ public class ShowApplicationsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         ApplicationDao applicationDao = new ApplicationDaoImpl();
-        int[] pagesInfo = Pagination.paginateRequest(request, applicationDao.countApplications(), 5);
-        int[] scope = Pagination.getScope(pagesInfo[0], pagesInfo[1]);
+        int recordsPerPage = 6;
+        int currentPage = Pagination.paginateRequest(request, applicationDao.countApplications(), recordsPerPage);
+        int[] scope = Pagination.getScope(currentPage, recordsPerPage);
 
         List<Application> applications = applicationDao.findApplicationsFromScope(scope[0], scope[1]);
 

@@ -12,7 +12,9 @@ import com.maxym.booking.db.util.DBManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ApplicationDaoImpl implements ApplicationDao {
     public static final String SQL_INSERT_APPLICATION = "INSERT INTO application " +
@@ -20,10 +22,17 @@ public class ApplicationDaoImpl implements ApplicationDao {
     public static final String SQL_INSERT_RESERVATION = "INSERT INTO application " +
             "(check_in_date, check_out_date, status, total_price, bill_id, user_id, room_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_APPLICATION_BY_ID = "SELECT * FROM application WHERE id=?";
-    private static final String SQL_FIND_ALL_APPLICATIONS = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY -id";
-    private static final String SQL_FIND_APPLICATIONS_FROM_TO = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY -id LIMIT %d,%d";
-    private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY -id";
-    private static final String SQL_FIND_RESERVATIONS_FROM_TO = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY -id LIMIT %d,%d";
+    private static final String SQL_FIND_APPLICATIONS_BOOKED_ON_DATE = "SELECT check_in_date, check_out_date, room_id " +
+            "FROM application " +
+            "WHERE status != 'LOOKING_FOR'" +
+            "    and check_in_date BETWEEN ? AND ?" +
+            "   OR check_out_date BETWEEN ? AND ?" +
+            "   OR ? BETWEEN check_in_date AND check_out_date " +
+            "ORDER BY -id";
+    private static final String SQL_FIND_ALL_APPLICATIONS = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY id DESC";
+    private static final String SQL_FIND_APPLICATIONS_FROM_TO = "SELECT * FROM application WHERE status='LOOKING_FOR' or status='ACCEPT_WAITING' or status='OUT_OF_TIME' ORDER BY id DESC LIMIT %d,%d";
+    private static final String SQL_FIND_ALL_RESERVATIONS = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY id DESC";
+    private static final String SQL_FIND_RESERVATIONS_FROM_TO = "SELECT * FROM application WHERE status='PAYMENT_WAITING' or status='BOOKED' ORDER BY id DESC LIMIT %d,%d";
     private static final String SQL_DELETE_APPLICATION_BY_ID = "DELETE FROM application WHERE id=?";
     private static final String SQL_CONFIRM_APPLICATION_BY_ID = "UPDATE application SET status = 'PAYMENT_WAITING' WHERE id=?";
     private static final String SQL_REJECT_APPLICATION_BY_ID = "UPDATE application SET status = 'LOOKING_FOR', room_id=null WHERE id=?";
@@ -157,6 +166,31 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
+    public Set<Long> findApplicationsBookedOnDate(Date checkIn, Date checkOut) {
+        Set<Long> roomIdSet = new HashSet<>();
+        try (Connection connection = DBManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_APPLICATIONS_BOOKED_ON_DATE)) {
+            preparedStatement.setDate(1, checkIn);
+            preparedStatement.setDate(2, checkOut);
+            preparedStatement.setDate(3, checkIn);
+            preparedStatement.setDate(4, checkOut);
+            preparedStatement.setDate(5, checkIn);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                roomIdSet.add(resultSet.getLong(Fields.APPLICATION_ROOM_ID));
+            }
+            resultSet.close();
+
+            connection.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+//            TODO: Catch exception
+        }
+        return roomIdSet;
+    }
+
+    @Override
     public Application findApplicationById(long id) {
         Application application = null;
         try (Connection connection = DBManager.getInstance().getConnection();
@@ -183,7 +217,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findApplicationsFromScope(int from, int to) {
-        return findApplicationsBySql(String.format(SQL_FIND_APPLICATIONS_FROM_TO, from, to), false);
+        return findApplicationsBySql(String.format(SQL_FIND_APPLICATIONS_FROM_TO, from, to - from), false);
     }
 
     @Override
@@ -193,7 +227,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findReservationsFromScope(int from, int to) {
-        return findApplicationsBySql(String.format(SQL_FIND_RESERVATIONS_FROM_TO, from, to), true);
+        return findApplicationsBySql(String.format(SQL_FIND_RESERVATIONS_FROM_TO, from, to - from), true);
     }
 
     @Override

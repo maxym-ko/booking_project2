@@ -17,49 +17,7 @@
 <div class="container mt-5">
 
     <c:if test="${role == 'USER'}">
-        <div class="container">
-            <a class="btn btn-primary mb-3" data-toggle="collapse" href="#newApplicationsId" role="button"
-               aria-expanded="false"
-               aria-controls="collapseExample">
-                <fmt:message key="applications.create"/>
-            </a>
-            <div class="collapse" id="newApplicationsId">
-                <div class="form-group">
-                    <form action="<c:url value="/controller?command=create_application"/>" method="post">
-                        <div class="form-row">
-                            <div class="form-group col-md">
-                                <input class="form-control" type="number" min="0" name="capacity"
-                                       placeholder="<fmt:message key="room.add.capacity"/>">
-                            </div>
-                            <div class="form-group col-md">
-                                <select class="custom-select" name="type">
-                                    <option disabled selected><fmt:message key="applications.type_select"/></option>
-                                    <option value="ECONOMY"><fmt:message key="room.type.economy"/></option>
-                                    <option value="STANDARD"><fmt:message key="room.type.standard"/></option>
-                                    <option value="LUXURY"><fmt:message key="room.type.luxury"/></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="check-in"><fmt:message key="room.check_in"/></label>
-                                <input class="form-control" name="checkInDate" type="date"
-                                       id="check-in">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="check-out"><fmt:message key="room.check_out"/></label>
-                                <input class="form-control" name="checkOutDate" type="date"
-                                       id="check-out">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-success" type="submit"><fmt:message
-                                    key="applications.action.create"/></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <%@ include file="../jspf/application/addApplication.jspf" %>
     </c:if>
 
     <div class="container">
@@ -139,7 +97,9 @@
                             <c:otherwise>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <a href="<c:url value="/controller?command=find_room&id=${application.id}"/>"
+                                        <a href="<c:url value="/controller?command=find_room&id=${application.id}
+                                                                         &check_in_date=${application.checkInDate}
+                                                                         &check_out_date=${application.checkOutDate}"/>"
                                            type="submit" class="btn btn-success">
                                             <c:choose>
                                                 <c:when test="${application.status == 'ACCEPT_WAITING'}">
@@ -176,6 +136,7 @@
             </c:forEach>
             </tbody>
         </table>
+
         <%@ include file="../jspf/pagination.jspf" %>
     </div>
 </div>

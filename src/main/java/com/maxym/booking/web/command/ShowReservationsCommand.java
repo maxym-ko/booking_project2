@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ShowReservationsCommand implements Command {
-
     private static final long serialVersionUID = 193635295621833248L;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         ApplicationDao applicationDao = new ApplicationDaoImpl();
-        int[] pagesInfo = Pagination.paginateRequest(request, applicationDao.countReservations(), 5);
-        int[] scope = Pagination.getScope(pagesInfo[0], pagesInfo[1]);
+        int recordsPerPage = 6;
+        int currentPage = Pagination.paginateRequest(request, applicationDao.countReservations(), recordsPerPage);
+        int[] scope = Pagination.getScope(currentPage, recordsPerPage);
 
         List<Application> reservations = applicationDao.findReservationsFromScope(scope[0], scope[1]);
         request.setAttribute("reservations", reservations);

@@ -5,13 +5,14 @@ import com.maxym.booking.Path;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class FindRoomCommand extends ShowRoomsCommand {
-    private static final long serialVersionUID = 5574093569700060989L;
+public class SearchRoomCommand extends ShowRoomsCommand {
+    private static final long serialVersionUID = -8467555172013196674L;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("isBookAvailable", true);
         execute0(request, true);
 
-        return Path.PAGE_FIND_ROOM;
+        return Path.PAGE_HOME;
     }
 }

@@ -10,8 +10,8 @@ public class HomeCommand extends ShowRoomsCommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        execute0(request);
+        execute0(request, false);
 
-        return Path.PAGE_MAIN;
+        return Path.PAGE_HOME;
     }
 }
