@@ -23,15 +23,15 @@
                 <form action="<c:url value="/controller?command=search_rooms"/>" method="post">
                     <div class="form-row p-2">
                         <div class="col">
-                            <label for="check_in_date">Check-in</label>
+                            <label for="check_in_date"><fmt:message key="applications.check_in"/></label>
                             <input class="form-control" id="check_in_date" type="date" name="check_in_date">
                         </div>
                         <div class="col">
-                            <label for="check_out_date">Check-out</label>
+                            <label for="check_out_date"><fmt:message key="applications.check_out"/></label>
                             <input class="form-control" id="check_out_date" type="date" name="check_out_date">
                         </div>
                         <div class="col-1 align-self-end">
-                            <button type="submit" class="form-control btn-success" id="search">Search</button>
+                            <button type="submit" class="form-control btn-success" id="search"><fmt:message key="room.search"/></button>
                         </div>
                     </div>
                 </form>
