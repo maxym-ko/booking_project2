@@ -19,13 +19,21 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label"><fmt:message key="login.username"/>: </label>
             <div class="col-sm-5">
-                <input class="form-control" type="text" name="username" placeholder="username"/>
+                <input class="form-control ${requestScope.usernameValid}" value="${requestScope.usernameNotFound}"
+                       type="text" name="username" placeholder="username" required>
+                <div class="invalid-feedback">
+                    Couldn't find such a username
+                </div>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label"><fmt:message key="login.password"/>: </label>
             <div class="col-sm-5">
-                <input class="form-control" type="password" name="password" placeholder="password"/>
+                <input class="form-control ${requestScope.passwordValid}" type="password" name="password"
+                       placeholder="password" required>
+                <div class="invalid-feedback">
+                    Wrong password
+                </div>
             </div>
         </div>
         <button class="btn btn-primary mr-2" type="submit"><fmt:message key="login.sign_in"/></button>

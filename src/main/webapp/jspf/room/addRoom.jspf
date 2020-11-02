@@ -9,18 +9,18 @@
 </a>
 <div class="collapse" id="addNewRoomId">
     <div class="form-group">
-        <form action="<c:url value="/controller?command=add_room"/>" method="post">
+        <form enctype='multipart/form-data' action="<c:url value="/controller?command=add_room"/>" method="post">
             <div class="form-row">
                 <div class="form-group col-md">
-                    <input class="form-control" type="text" name="capacity" placeholder="<fmt:message key="room.add.capacity"/>">
+                    <input class="form-control" name="capacity"  type="number" min="0" max="5" placeholder="<fmt:message key="room.add.capacity"/>" required>
                 </div>
                 <div class="form-group col-md">
-                    <input class="form-control" type="text" name="price" placeholder="<fmt:message key="room.add.price"/>">
+                    <input class="form-control" name="price" type="number" min="0" placeholder="<fmt:message key="room.add.price"/>" required>
                 </div>
                 <div class="form-group col-md">
                     <select class="custom-select" name="type">
-                        <option disabled selected><fmt:message key="room.add.type"/></option>
-                        <option value="ECONOMY"><fmt:message key="room.type.economy"/></option>
+                        <option disabled><fmt:message key="room.add.type"/></option>
+                        <option value="ECONOMY" selected><fmt:message key="room.type.economy"/></option>
                         <option value="STANDARD"><fmt:message key="room.type.standard"/></option>
                         <option value="LUXURY"><fmt:message key="room.type.luxury"/></option>
                     </select>

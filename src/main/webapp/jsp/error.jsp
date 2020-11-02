@@ -16,8 +16,16 @@
 
 
 <div class="container mt-5">
-    <h1>Error</h1>
-    <h3>${requestScope.message}</h3>
+    <c:choose>
+        <c:when test="${empty requestScope.message}">
+            <h1>Error 404</h1>
+            <h3>Cannot find such a resource</h3>
+        </c:when>
+        <c:otherwise>
+            <h1>Error</h1>
+            <h3>${requestScope.message}</h3>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <jsp:include page="../jspf/page/footer.jspf"/>

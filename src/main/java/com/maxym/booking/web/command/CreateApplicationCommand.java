@@ -19,6 +19,7 @@ public class CreateApplicationCommand implements Command {
         User user = (User) request.getSession().getAttribute("user");
         int capacity = Integer.parseInt(request.getParameter("capacity"));
         RoomType type = RoomType.valueOf(request.getParameter("type"));
+
         Date checkInDate = Date.valueOf(request.getParameter("checkInDate"));
         Date checkOutDate = Date.valueOf(request.getParameter("checkOutDate"));
 

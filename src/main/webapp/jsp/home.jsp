@@ -24,16 +24,21 @@
                     <div class="form-row p-2">
                         <div class="col">
                             <label for="check_in_date"><fmt:message key="applications.check_in"/></label>
-                            <input class="form-control" id="check_in_date" type="date" name="check_in_date">
+                            <input class="form-control" id="check_in_date"
+                                   value="${requestScope.checkInDate}" type="date" name="check_in_date"
+                                   onchange="check_out_date.min = this.value" required>
                         </div>
                         <div class="col">
                             <label for="check_out_date"><fmt:message key="applications.check_out"/></label>
-                            <input class="form-control" id="check_out_date" type="date" name="check_out_date">
+                            <input class="form-control" id="check_out_date"
+                                   value="${requestScope.checkOutDate}" type="date" name="check_out_date" required>
                         </div>
                         <div class="col-1 align-self-end">
-                            <button type="submit" class="form-control btn-success" id="search"><fmt:message key="room.search"/></button>
+                            <button type="submit" class="form-control btn-success" id="search"><fmt:message
+                                    key="room.search"/></button>
                         </div>
                     </div>
+                    <script src="<c:url value="/js/date_initial.js"/>" type="text/javascript"></script>
                 </form>
             </div>
             <hr class="mt-4 mb-3"/>
@@ -65,7 +70,7 @@
                                 <button class="btn btn-success" type="submit"><fmt:message key="room.book"/></button>
                                 <input type="hidden" name="id" value="${room.id}">
                             </form>
-<%--                            <%@ include file="../jspf/room/bookRoom.jspf" %>--%>
+                            <%--                            <%@ include file="../jspf/room/bookRoom.jspf" %>--%>
                         </c:if>
                         <c:if test="${role == 'ADMIN'}">
                             <form action="<c:url value="/controller?command=change_room"/>" method="post">
@@ -74,7 +79,7 @@
                                     <label for="capacity" class="col-sm-6 col-form-label"><fmt:message
                                             key="room.capacity"/>: </label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="capacity" type="number" min="1"
+                                        <input class="form-control" id="capacity" type="number" min="0" max="5"
                                                name="capacity"
                                                value="${room.capacity}">
                                     </div>

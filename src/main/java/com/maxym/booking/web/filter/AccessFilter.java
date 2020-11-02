@@ -2,6 +2,7 @@ package com.maxym.booking.web.filter;
 
 import com.maxym.booking.Path;
 import com.maxym.booking.db.entity.user.Role;
+import com.maxym.booking.web.command.CommandContainer;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,10 @@ public class AccessFilter implements Filter {
     private List<String> outOfControl = new ArrayList<>();
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!accessAllowed(request)) {
+        if (!commandExist(request)) {
+            request.setAttribute("message", "There is no such a command");
+            request.getRequestDispatcher(Path.PAGE_ERROR).forward(request, response);
+        } else if (!accessAllowed(request)) {
             request.setAttribute("message", "You don't have an access to this page");
             request.getRequestDispatcher(Path.PAGE_ERROR).forward(request, response);
         } else {
@@ -43,8 +47,15 @@ public class AccessFilter implements Filter {
         return accessMap.get(userRole).contains(commandName) || commons.contains(commandName);
     }
 
+    private boolean commandExist(ServletRequest request) {
+        String commandName = request.getParameter("command");
+        if (commandName == null) return true;
+
+        return CommandContainer.contains(commandName);
+    }
+
     @Override
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(FilterConfig fConfig) {
         // roles
         accessMap.put(Role.ADMIN, Arrays.asList(fConfig.getInitParameter("admin").split("\\s")));
         accessMap.put(Role.USER, Arrays.asList(fConfig.getInitParameter("user").split("\\s")));

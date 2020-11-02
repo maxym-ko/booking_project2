@@ -10,11 +10,10 @@ import com.maxym.booking.db.util.DBManager;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class RoomDaoImpl implements RoomDao {
-    public static final String SQL_INSERT_ROOM = "INSERT INTO room (capacity, price, type, status) VALUES (?, ?, ?, ?)";
+    public static final String SQL_INSERT_ROOM = "INSERT INTO room (capacity, price, type, status, img_name) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_FIND_ROOM_BY_ID = "SELECT * FROM room WHERE id=?";
     private static final String SQL_FIND_ROOMS_FROM_SCOPE = "SELECT * FROM room LIMIT ?,?";
     private static final String SQL_FIND_ROOMS_FROM_SCOPE_ORDER_BY = "SELECT * FROM room ORDER BY %s LIMIT ?,?";
@@ -32,6 +31,7 @@ public class RoomDaoImpl implements RoomDao {
             preparedStatement.setDouble(2, room.getPrice());
             preparedStatement.setString(3, room.getType().name());
             preparedStatement.setString(4, room.getStatus().name());
+            preparedStatement.setString(5, room.getImgName());
 
             preparedStatement.executeUpdate();
             connection.commit();

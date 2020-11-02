@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginCommand implements Command {
-
     private static final long serialVersionUID = -7356558627418433620L;
 
     @Override
@@ -20,11 +19,15 @@ public class LoginCommand implements Command {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // TODO: error handler
         UserDao userDao = new UserDaoImpl();
         User user = userDao .findUserByUsername(username);
 
-        if (user == null || !password.equals(user.getPassword())) {
+        request.setAttribute("usernameNotFound", username);
+        if (user == null) {
+            request.setAttribute("usernameValid", "is-invalid");
+            return Path.PAGE_LOGIN;
+        } else if (!password.equals(user.getPassword())) {
+            request.setAttribute("passwordValid", "is-invalid");
             return Path.PAGE_LOGIN;
         }
 

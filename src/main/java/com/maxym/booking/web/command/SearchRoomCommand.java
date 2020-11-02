@@ -11,6 +11,8 @@ public class SearchRoomCommand extends ShowRoomsCommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("isBookAvailable", true);
+        request.setAttribute("checkInDate", request.getParameter("check_in_date"));
+        request.setAttribute("checkOutDate", request.getParameter("check_out_date"));
         execute0(request, true);
 
         return Path.PAGE_HOME;

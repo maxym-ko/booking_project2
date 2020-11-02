@@ -30,7 +30,7 @@
         </init-param>
         <init-param>
             <param-name>common</param-name>
-            <param-value>logout show_applications</param-value>
+            <param-value>logout show_applications remove_application</param-value>
         </init-param>
         <init-param>
             <param-name>out-of-control</param-name>
@@ -44,6 +44,16 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>ParamsFilter</filter-name>
+        <filter-class>com.maxym.booking.web.filter.ParamsFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ParamsFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
         <filter-name>LocaleFilter</filter-name>
         <filter-class>com.maxym.booking.web.filter.LocaleFilter</filter-class>
     </filter>
@@ -51,5 +61,10 @@
         <filter-name>LocaleFilter</filter-name>
         <servlet-name>Controller</servlet-name>
     </filter-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/jsp/error.jsp</location>
+    </error-page>
 
 </web-app>

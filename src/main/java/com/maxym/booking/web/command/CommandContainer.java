@@ -2,10 +2,6 @@ package com.maxym.booking.web.command;
 
 import com.maxym.booking.Path;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -45,5 +41,9 @@ public class CommandContainer {
         if (!commands.containsKey(commandName)) return commands.get("invalid");
 
         return commands.get(commandName);
+    }
+
+    public static boolean contains(String commandName) {
+        return commands.get(commandName) != null;
     }
 }
