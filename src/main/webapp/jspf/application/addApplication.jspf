@@ -16,11 +16,11 @@
                 <div class="form-row">
                     <div class="form-group col-md">
                         <input class="form-control" type="number" min="0" max="5" name="capacity"
-                               placeholder="<fmt:message key="room.add.capacity"/>">
+                               placeholder="<fmt:message key="room.add.capacity"/>" required>
                     </div>
                     <div class="form-group col-md">
-                        <select class="custom-select" name="type">
-                            <option disabled selected><fmt:message key="applications.type_select"/></option>
+                        <select class="custom-select" name="type" required>
+                            <option disabled><fmt:message key="applications.type_select"/></option>
                             <option value="ECONOMY"><fmt:message key="room.type.economy"/></option>
                             <option value="STANDARD"><fmt:message key="room.type.standard"/></option>
                             <option value="LUXURY"><fmt:message key="room.type.luxury"/></option>
