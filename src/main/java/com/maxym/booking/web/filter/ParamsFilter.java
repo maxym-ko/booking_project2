@@ -25,28 +25,30 @@ public class ParamsFilter implements Filter {
         String[] paramArray = commandParamMap.get(commandName);
         if (paramArray == null) return true;
 
-        Enumeration<String> actualParams = request.getParameterNames();
         List<String> requiredParams = Arrays.asList(paramArray);
+
+        Enumeration<String> actualParams = request.getParameterNames();
+        List<String> actualParamsList = new ArrayList<>();
+        actualParamsList.add("command");
         while (actualParams.hasMoreElements()) {
             String param = actualParams.nextElement();
-            if (requiredParams.contains(param)) return true;
+            actualParamsList.add(param);
         }
-
-        return false;
+        return actualParamsList.containsAll(requiredParams);
     }
 
     @Override
     public void init(FilterConfig fConfig) {
         commandParamMap.put("login", new String[] {"username", "password"});
         commandParamMap.put("registration", new String[] {"username", "password", "role"});
-//        commandParamMap.put("add_room", new String[] {"capacity", "type", "price", "file"});
+        commandParamMap.put("add_room", new String[] {"capacity", "type", "price", "file"});
         commandParamMap.put("change_room", new String[] {"id", "capacity", "type", "price"});
         commandParamMap.put("remove_room", new String[] {"id"});
-        commandParamMap.put("search_rooms", new String[] {"check_in_date", "check_out_date"});
-        commandParamMap.put("book_room", new String[] {"id", "check_in_date", "check_out_date"});
+        commandParamMap.put("search_rooms", new String[] {"checkInDate", "checkOutDate"});
+        commandParamMap.put("book_room", new String[] {"id", "checkInDate", "checkOutDate"});
         commandParamMap.put("select_room", new String[] {"id", "room_id"});
-        commandParamMap.put("find_room", new String[] {"sort", "check_in_date", "check_out_date"});
-        commandParamMap.put("create_application", new String[] {"capacity", "type", "check_in_date", "check_out_date"});
+        commandParamMap.put("find_room", new String[] {"checkInDate", "checkOutDate"});
+        commandParamMap.put("create_application", new String[] {"capacity", "type", "checkInDate", "checkOutDate"});
         commandParamMap.put("accept_application", new String[] {"id"});
         commandParamMap.put("reject_application", new String[] {"id"});
         commandParamMap.put("remove_application", new String[] {"id"});

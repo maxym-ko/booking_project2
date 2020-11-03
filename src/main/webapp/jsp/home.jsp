@@ -25,13 +25,13 @@
                         <div class="col">
                             <label for="check_in_date"><fmt:message key="applications.check_in"/></label>
                             <input class="form-control" id="check_in_date"
-                                   value="${requestScope.checkInDate}" type="date" name="check_in_date"
+                                   value="${requestScope.checkInDate}" type="date" name="checkInDate"
                                    onchange="check_out_date.min = this.value" required>
                         </div>
                         <div class="col">
                             <label for="check_out_date"><fmt:message key="applications.check_out"/></label>
                             <input class="form-control" id="check_out_date"
-                                   value="${requestScope.checkOutDate}" type="date" name="check_out_date" required>
+                                   value="${requestScope.checkOutDate}" type="date" name="checkOutDate" required>
                         </div>
                         <div class="col-1 align-self-end">
                             <button type="submit" class="form-control btn-success" id="search"><fmt:message
@@ -68,8 +68,8 @@
                         <c:if test="${role == 'USER' and requestScope.isBookAvailable}">
                             <form action="<c:url value="/controller?command=book_room"/>" method="post">
                                 <button class="btn btn-success" type="submit"><fmt:message key="room.book"/></button>
-                                <input type="hidden" name="check_in_date" value="${requestScope.checkInDate}">
-                                <input type="hidden" name="check_out_date" value="${requestScope.checkOutDate}">
+                                <input type="hidden" name="checkInDate" value="${requestScope.checkInDate}">
+                                <input type="hidden" name="checkOutDate" value="${requestScope.checkOutDate}">
                                 <input type="hidden" name="id" value="${room.id}">
                             </form>
                             <%--                            <%@ include file="../jspf/room/bookRoom.jspf" %>--%>

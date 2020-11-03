@@ -26,8 +26,8 @@ public abstract class ShowRoomsCommand implements Command {
         List<Room> rooms;
         String sort = request.getParameter("sort");
         if (showVacantOnly) {
-            Date checkIn = Date.valueOf(request.getParameter("check_in_date"));
-            Date checkOut = Date.valueOf(request.getParameter("check_out_date"));
+            Date checkIn = Date.valueOf(request.getParameter("checkInDate"));
+            Date checkOut = Date.valueOf(request.getParameter("checkOutDate"));
             Set<Long> roomIds = applicationDao.findApplicationsBookedOnDate(checkIn, checkOut);
             rooms = roomDao.findRoomsFromScopeExceptOrderBy(sort, scope[0], scope[1], roomIds);
         } else {
