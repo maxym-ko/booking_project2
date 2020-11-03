@@ -68,6 +68,8 @@
                         <c:if test="${role == 'USER' and requestScope.isBookAvailable}">
                             <form action="<c:url value="/controller?command=book_room"/>" method="post">
                                 <button class="btn btn-success" type="submit"><fmt:message key="room.book"/></button>
+                                <input type="hidden" name="check_in_date" value="${requestScope.checkInDate}">
+                                <input type="hidden" name="check_out_date" value="${requestScope.checkOutDate}">
                                 <input type="hidden" name="id" value="${room.id}">
                             </form>
                             <%--                            <%@ include file="../jspf/room/bookRoom.jspf" %>--%>

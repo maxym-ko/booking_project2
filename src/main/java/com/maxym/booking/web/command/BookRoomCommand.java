@@ -28,8 +28,8 @@ public class BookRoomCommand implements Command {
         Room room = roomDao.findRoomById(roomId);
         room.setStatus(RoomStatus.BOOKED);
 
-        Date checkInDate = Date.valueOf(request.getParameter("checkInDate"));
-        Date checkOutDate = Date.valueOf(request.getParameter("checkOutDate"));
+        Date checkInDate = Date.valueOf(request.getParameter("check_in_date"));
+        Date checkOutDate = Date.valueOf(request.getParameter("check_out_date"));
         Bill bill = new Bill(checkInDate, checkOutDate, room.getPrice());
         bill.setId(new BillDaoImpl().saveBill(bill));
 
