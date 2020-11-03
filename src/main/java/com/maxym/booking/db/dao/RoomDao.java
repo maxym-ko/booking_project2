@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface RoomDao {
-    void saveRoom(Room room);
+    long saveRoom(Room room);
     Room findRoomById(long id);
     List<Room> findRoomsFromScopeOrderBy(String orderBy, int from, int to);
     List<Room> findRoomsFromScopeExceptOrderBy(String orderBy, int from, int to, Set<Long> roomIds);

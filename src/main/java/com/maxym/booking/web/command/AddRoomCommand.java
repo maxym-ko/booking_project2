@@ -1,28 +1,29 @@
 package com.maxym.booking.web.command;
 
 import com.maxym.booking.Path;
-import com.maxym.booking.db.dao.RoomDao;
 import com.maxym.booking.db.dao.impl.RoomDaoImpl;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
 import com.maxym.booking.db.entity.room.RoomType;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AddRoomCommand implements Command {
+    private static final Logger LOG = Logger.getLogger(AddRoomCommand.class);
+
     private static final long serialVersionUID = -8614487041194751620L;
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        LOG.debug("Command starts");
+
         int capacity = Integer.parseInt(request.getParameter("capacity"));
         RoomType type = RoomType.valueOf(request.getParameter("type"));
         double price = Double.parseDouble(request.getParameter("price"));
@@ -33,8 +34,11 @@ public class AddRoomCommand implements Command {
                 .price(price)
                 .status(RoomStatus.VACANT)
                 .imgName(saveImgToRoom(request)).build();
-        new RoomDaoImpl().saveRoom(room);
+        long id = new RoomDaoImpl().saveRoom(room);
 
+        LOG.trace("Room with id=" + id + " was save to the DB");
+
+        LOG.debug("Command finished");
         return Path.REDIRECT_HOME;
 
     }

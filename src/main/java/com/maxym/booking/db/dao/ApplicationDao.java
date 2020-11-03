@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface ApplicationDao {
-    void saveApplication(Application application);
-    void saveReservation(Application application);
+    long saveApplication(Application application);
+    long saveReservation(Application application);
     void confirmApplicationById(long id);
     void rejectApplicationById(long id);
     void updateApplication(Application application);

@@ -12,7 +12,6 @@ public final class Path {
     public static final String PAGE_RESERVATIONS = "jsp/reservations.jsp";
     public static final String PAGE_FIND_ROOM = "jsp/find_room.jsp";
 
-    public static final String REDIRECT_FORBIDDEN_COMMAND = "/controller?command=forbidden";
     public static final String REDIRECT_SHOW_LOGIN = "/controller?command=show_login";
     public static final String REDIRECT_HOME = "/controller?command=home";
     public static final String REDIRECT_APPLICATIONS = "/controller?command=show_applications";

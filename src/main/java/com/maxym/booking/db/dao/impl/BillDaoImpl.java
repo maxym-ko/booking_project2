@@ -4,10 +4,13 @@ import com.maxym.booking.db.Fields;
 import com.maxym.booking.db.dao.BillDao;
 import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.util.DBManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 
 public class BillDaoImpl implements BillDao {
+    private static final Logger LOG = Logger.getLogger(BillDaoImpl.class);
+
     public static final String SQL_INSERT_BILL = "INSERT INTO bill (created, receipt_id, total_price) VALUES (?, ?, ?)";
     private static final String SQL_FIND_BILL_BY_ID = "SELECT * FROM bill WHERE id=?";
     private static final String SQL_DELETE_BILL_BY_ID = "DELETE FROM bill WHERE id=?";
@@ -15,7 +18,7 @@ public class BillDaoImpl implements BillDao {
 
     @Override
     public long saveBill(Bill bill) {
-        long billId = -1;
+        long id = -1;
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_BILL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDate(1, bill.getCreated());
@@ -25,13 +28,13 @@ public class BillDaoImpl implements BillDao {
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next()) billId = resultSet.getLong(1);
+            if (resultSet.next()) id = resultSet.getLong(1);
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while saving bill", ex);
         }
-        return billId;
+        return id;
     }
 
     @Override
@@ -42,8 +45,8 @@ public class BillDaoImpl implements BillDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while deleting bill by id", ex);
         }
     }
 
@@ -56,8 +59,8 @@ public class BillDaoImpl implements BillDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while updating bill by id", ex);
         }
     }
 
@@ -72,7 +75,7 @@ public class BillDaoImpl implements BillDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while finding bill by id", ex);
         }
         return bill;
     }

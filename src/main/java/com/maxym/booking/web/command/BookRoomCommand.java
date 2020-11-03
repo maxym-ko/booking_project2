@@ -11,16 +11,21 @@ import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
 import com.maxym.booking.db.entity.user.User;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 
 public class BookRoomCommand implements Command {
+    private static final Logger LOG = Logger.getLogger(BookRoomCommand.class);
+
     private static final long serialVersionUID = 7376792463530848535L;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        LOG.debug("Command starts");
+
         User user = (User) request.getSession().getAttribute("user");
 
         long roomId = Long.parseLong(request.getParameter("id"));
@@ -40,8 +45,11 @@ public class BookRoomCommand implements Command {
         reservation.setTotalPrice(bill.getTotalPrice());
         reservation.setStatus(ApplicationStatus.PAYMENT_WAITING);
 
-        new ApplicationDaoImpl().saveReservation(reservation);
+        long reservationId = new ApplicationDaoImpl().saveReservation(reservation);
 
+        LOG.trace("Room with id=" + roomId + " was booked, the application id=" + reservationId);
+
+        LOG.debug("Command finished");
         return Path.REDIRECT_RESERVATIONS;
     }
 }

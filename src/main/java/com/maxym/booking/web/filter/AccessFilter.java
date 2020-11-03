@@ -3,6 +3,7 @@ package com.maxym.booking.web.filter;
 import com.maxym.booking.Path;
 import com.maxym.booking.db.entity.user.Role;
 import com.maxym.booking.web.command.CommandContainer;
+import org.apache.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,19 +15,29 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class AccessFilter implements Filter {
-    // commands access
+    private static final Logger LOG = Logger.getLogger(AccessFilter.class);
+
     private final EnumMap<Role, List<String>> accessMap = new EnumMap<>(Role.class);
     private List<String> commons = new ArrayList<>();
     private List<String> outOfControl = new ArrayList<>();
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!commandExist(request)) {
+        LOG.debug("AccessFilter starts");
+        String command = request.getParameter("command");
+
+        if (!commandExist(command)) {
+            LOG.debug("There is no such a command --> " + command + ", AccessFilter finished");
+
             request.setAttribute("message", "There is no such a command");
             request.getRequestDispatcher(Path.PAGE_ERROR).forward(request, response);
         } else if (!accessAllowed(request)) {
+            LOG.debug("You don't have an access to this page --> " + command + ", AccessFilter finished");
+
             request.setAttribute("message", "You don't have an access to this page");
             request.getRequestDispatcher(Path.PAGE_ERROR).forward(request, response);
         } else {
+            LOG.debug("AccessFilter finished");
+
             chain.doFilter(request, response);
         }
     }
@@ -47,24 +58,22 @@ public class AccessFilter implements Filter {
         return accessMap.get(userRole).contains(commandName) || commons.contains(commandName);
     }
 
-    private boolean commandExist(ServletRequest request) {
-        String commandName = request.getParameter("command");
-        if (commandName == null) return true;
+    private boolean commandExist(String commandName) {
+        if (commandName == null) {
+            return true;
+        }
 
         return CommandContainer.contains(commandName);
     }
 
     @Override
     public void init(FilterConfig fConfig) {
-        // roles
         accessMap.put(Role.ADMIN, Arrays.asList(fConfig.getInitParameter("admin").split("\\s")));
         accessMap.put(Role.USER, Arrays.asList(fConfig.getInitParameter("user").split("\\s")));
         accessMap.put(Role.GUEST, Arrays.asList(fConfig.getInitParameter("guest").split("\\s")));
 
-        // commons
         commons = Arrays.asList(fConfig.getInitParameter("common").split("\\s"));
 
-        // out of control
         outOfControl = Arrays.asList(fConfig.getInitParameter("out-of-control").split("\\s"));
     }
 }

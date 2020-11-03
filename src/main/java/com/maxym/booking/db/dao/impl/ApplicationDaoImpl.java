@@ -9,6 +9,7 @@ import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomType;
 import com.maxym.booking.db.entity.user.User;
 import com.maxym.booking.db.util.DBManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ApplicationDaoImpl implements ApplicationDao {
+    private static final Logger LOG = Logger.getLogger(ApplicationDaoImpl.class);
+
     public static final String SQL_INSERT_APPLICATION = "INSERT INTO application " +
             "(check_in_date, check_out_date, requirement_capacity, requirement_type, status, user_id) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String SQL_INSERT_RESERVATION = "INSERT INTO application " +
@@ -47,9 +50,10 @@ public class ApplicationDaoImpl implements ApplicationDao {
             "DO DELETE FROM application WHERE id=?";
 
     @Override
-    public void saveApplication(Application application) {
+    public long saveApplication(Application application) {
+        long id = -1;
         try (Connection connection = DBManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_APPLICATION)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_APPLICATION, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDate(1, application.getCheckInDate());
             preparedStatement.setDate(2, application.getCheckOutDate());
             preparedStatement.setInt(3, application.getRequirementCapacity());
@@ -58,14 +62,23 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.setLong(6, application.getOwner().getId());
 
             preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                id = resultSet.getLong(1);
+                application.setId(id);
+            }
+
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while saving application", ex);
         }
+        return id;
     }
 
     @Override
-    public void saveReservation(Application application) {
+    public long saveReservation(Application application) {
+        long id = -1;
         try (Connection connection = DBManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_RESERVATION, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDate(1, application.getCheckInDate());
@@ -78,16 +91,18 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next())
-                application.setId(resultSet.getLong(1));
+            if (resultSet.next()) {
+                id = resultSet.getLong(1);
+                application.setId(id);
+            }
 
             connection.commit();
 
             startEventToDeleteApplicationById(connection, application.getId());
         } catch (SQLException ex) {
-            ex.printStackTrace();
-//            TODO: Catch exception
+            LOG.error("Failed while saving reservation", ex);
         }
+        return id;
     }
 
     @Override
@@ -100,8 +115,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             connection.commit();
 
             startEventToDeleteApplicationById(connection, id);
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while confirming application by id", ex);
         }
     }
 
@@ -113,8 +128,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while rejecting application by id", ex);
         }
     }
 
@@ -133,9 +148,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.setLong(7, application.getId());
             preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while updating application", ex);
         }
     }
 
@@ -147,8 +161,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while deleting application by id", ex);
         }
     }
 
@@ -160,8 +174,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while confirming application payment by id", ex);
         }
     }
 
@@ -184,8 +198,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             connection.commit();
         } catch (SQLException ex) {
-            ex.printStackTrace();
-//            TODO: Catch exception
+            LOG.error("Failed while finding application booked on the specific date", ex);
         }
         return roomIdSet;
     }
@@ -205,7 +218,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while finding application by id", ex);
         }
         return application;
     }
@@ -250,7 +263,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while counting a number of rows", ex);
         }
         return res;
     }
@@ -267,7 +280,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while finding application by given sql statement", ex);
         }
         return applications;
     }
@@ -293,8 +306,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while starting a event to delete bill after 2 days without confirmation", ex);
         }
     }
 }

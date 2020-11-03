@@ -1,19 +1,26 @@
 package com.maxym.booking.web.filter;
 
 import com.maxym.booking.Path;
+import org.apache.log4j.Logger;
 
 import javax.servlet.*;
 import java.io.IOException;
 import java.util.*;
 
 public class ParamsFilter implements Filter {
+    private static final Logger LOG = Logger.getLogger(ParamsFilter.class);
+
     private static final Map<String, String[]> commandParamMap = new HashMap<>();
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        LOG.debug("ParamsFilter starts");
+
         if (!validate(request)) {
             request.setAttribute("message", "Some of the params are missed");
+            LOG.debug("Some of the params are missed, ParamsFilter finished");
             request.getRequestDispatcher(Path.PAGE_ERROR).forward(request, response);
         } else {
+            LOG.debug("ParamsFilter finished");
             chain.doFilter(request, response);
         }
     }

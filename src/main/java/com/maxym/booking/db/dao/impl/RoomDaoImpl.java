@@ -6,6 +6,7 @@ import com.maxym.booking.db.entity.room.Room;
 import com.maxym.booking.db.entity.room.RoomStatus;
 import com.maxym.booking.db.entity.room.RoomType;
 import com.maxym.booking.db.util.DBManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 public class RoomDaoImpl implements RoomDao {
+    private static final Logger LOG = Logger.getLogger(RoomDaoImpl.class);
+
     public static final String SQL_INSERT_ROOM = "INSERT INTO room (capacity, price, type, status, img_name) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_FIND_ROOM_BY_ID = "SELECT * FROM room WHERE id=?";
     private static final String SQL_FIND_ROOMS_FROM_SCOPE = "SELECT * FROM room LIMIT ?,?";
@@ -24,9 +27,10 @@ public class RoomDaoImpl implements RoomDao {
     public static final String SQL_COUNT_ROOMS = "SELECT COUNT(*) FROM room";
 
     @Override
-    public void saveRoom(Room room) {
+    public long saveRoom(Room room) {
+        long id = -1;
         try (Connection connection = DBManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ROOM)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ROOM, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, room.getCapacity());
             preparedStatement.setDouble(2, room.getPrice());
             preparedStatement.setString(3, room.getType().name());
@@ -34,10 +38,15 @@ public class RoomDaoImpl implements RoomDao {
             preparedStatement.setString(5, room.getImgName());
 
             preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) id = resultSet.getLong(1);
+
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while saving room", ex);
         }
+        return id;
     }
 
     @Override
@@ -53,7 +62,7 @@ public class RoomDaoImpl implements RoomDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while finding room by id", ex);
         }
         return room;
     }
@@ -96,9 +105,8 @@ public class RoomDaoImpl implements RoomDao {
             resultSet.close();
 
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while finding room from scope", ex);
         }
         return rooms;
     }
@@ -115,9 +123,8 @@ public class RoomDaoImpl implements RoomDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while updating room", ex);
         }
     }
 
@@ -129,8 +136,8 @@ public class RoomDaoImpl implements RoomDao {
             preparedStatement.executeUpdate();
 
             connection.commit();
-        } catch (SQLException e) {
-//            TODO: Catch exception
+        } catch (SQLException ex) {
+            LOG.error("Failed while deleting room by id", ex);
         }
     }
 
@@ -145,7 +152,7 @@ public class RoomDaoImpl implements RoomDao {
 
             connection.commit();
         } catch (SQLException ex) {
-//            TODO: Catch exception
+            LOG.error("Failed while counting a number of rows", ex);
         }
         return res;
     }

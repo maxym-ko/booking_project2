@@ -10,7 +10,7 @@ public class InvalidCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-//        request.setAttribute("message", "There is no such a command");
+        request.setAttribute("message", "There is no such a command");
 
         return Path.PAGE_ERROR;
     }

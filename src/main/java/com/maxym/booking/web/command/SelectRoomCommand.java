@@ -11,15 +11,20 @@ import com.maxym.booking.db.entity.application.Application;
 import com.maxym.booking.db.entity.application.ApplicationStatus;
 import com.maxym.booking.db.entity.application.Bill;
 import com.maxym.booking.db.entity.room.Room;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SelectRoomCommand implements Command {
+    private static final Logger LOG = Logger.getLogger(SelectRoomCommand.class);
+
     private static final long serialVersionUID = 3426893868634070322L;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        LOG.debug("Command starts");
+
         long applicationId = Long.parseLong(request.getParameter("id"));
         long roomId = Long.parseLong(request.getParameter("roomId"));
 
@@ -39,6 +44,9 @@ public class SelectRoomCommand implements Command {
 
         applicationDao.updateApplication(application);
 
+        LOG.trace("Room with id=" + roomId + " was selected for the application with id=" + applicationId);
+
+        LOG.debug("Command finished");
         return Path.REDIRECT_APPLICATIONS;
     }
 }

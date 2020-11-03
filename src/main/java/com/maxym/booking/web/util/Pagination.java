@@ -3,6 +3,8 @@ package com.maxym.booking.web.util;
 import javax.servlet.http.HttpServletRequest;
 
 public final class Pagination {
+    private Pagination() {}
+
     public static int paginateRequest(HttpServletRequest request, int numberOfRows, int recordsPerPage) {
         int noOfPages = (int) (Math.ceil(1. * numberOfRows / recordsPerPage));
         String tmp = request.getParameter("page");
